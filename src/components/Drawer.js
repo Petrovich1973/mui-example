@@ -9,9 +9,14 @@ import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import MenuIcon from "@material-ui/icons/Menu";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@material-ui/core/IconButton"
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+    link: {
+        textDecoration: "none",
+        color: "inherit"
+    },
     list: {
         width: 250
     },
@@ -42,18 +47,37 @@ export default function TemporaryDrawer() {
             onKeyDown={toggleDrawer(false)}
         >
             <List>
-                {['Inbox', 'Starred', 'Send email for model transition', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                        <ListItemText primary={text}/>
-                    </ListItem>
+                {[
+                    {label: "Dashboard", link: "/home"},
+                    {label: "Пользователи", link: "/users"}
+                ].map((text, index) => (
+
+                    <NavLink
+                        className={classes.link}
+                        key={index}
+                        to={text.link}
+                        activeStyle={{
+                            fontWeight: "bold",
+                            color: "black"
+                        }}
+                    >
+                        <ListItem button>
+                            <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> :
+                                <MailIcon/>}
+                            </ListItemIcon>
+                            <ListItemText primary={text.label}/>
+                        </ListItem>
+                    </NavLink>
+
+
                 ))}
             </List>
             <Divider/>
             <List>
                 {['All mail', 'Trash', 'Spam'].map((text, index) => (
                     <ListItem button key={text}>
-                        <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                        <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
+                        </ListItemIcon>
                         <ListItemText primary={text}/>
                     </ListItem>
                 ))}

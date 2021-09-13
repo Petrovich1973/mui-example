@@ -5,9 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-// import Switch from '@material-ui/core/Switch'
-// import FormControlLabel from '@material-ui/core/FormControlLabel'
-// import FormGroup from '@material-ui/core/FormGroup'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import TemporaryDrawer from "./Drawer"
@@ -16,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1
     },
+    header: {
+        boxShadow: "none"
+    },
     title: {
         flexGrow: 1
     }
@@ -23,13 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MenuAppBar() {
     const classes = useStyles()
-    const [auth, setAuth] = React.useState(true)
+    const [auth] = React.useState(true)
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
-
-    // const handleChange = (event) => {
-    //     setAuth(event.target.checked)
-    // }
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
@@ -41,12 +37,12 @@ export default function MenuAppBar() {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" color="transparent" className={classes.header}>
                 <Toolbar>
 
                     <TemporaryDrawer/>
-                    <Typography variant="h6" className={classes.title}>
-                        Team {'todo'} list
+                    <Typography variant="h5" className={classes.title}>
+                        Витрины отчетности по вкладам и счетам ФЛ в РМ ОЦ
                     </Typography>
                     {auth && (
                         <div>
@@ -74,19 +70,13 @@ export default function MenuAppBar() {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Logout</MenuItem>
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={handleClose}>Выйти</MenuItem>
+                                <MenuItem onClick={handleClose}>Профиль</MenuItem>
                             </Menu>
                         </div>
                     )}
                 </Toolbar>
             </AppBar>
-            {/*<FormGroup>
-                <FormControlLabel
-                    control={<Switch checked={auth} onChange={handleChange} aria-label="login switch"/>}
-                    label={auth ? 'Logout' : 'Login'}
-                />
-            </FormGroup>*/}
         </div>
     )
 }

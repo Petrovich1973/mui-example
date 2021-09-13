@@ -7,6 +7,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import WorkNav from "../components/WorkNav";
 import ReportsDoneList from "../components/ReportsDoneList";
+import Schedule from "../components/Schedule";
 
 export default function Work() {
     let {user} = useParams();
@@ -17,6 +18,7 @@ export default function Work() {
                 Пользователь {user}
             </Typography>
             <WorkNav/>
+            <div style={{height: 10}}></div>
             <SwitchRoute>
                 <Route exact path={path}>
                     {/* eslint-disable-next-line react/jsx-no-undef */}
@@ -24,6 +26,9 @@ export default function Work() {
                 </Route>
                 <Route exact path={`${path}/reports-done`}>
                     <ReportsDoneList/>
+                </Route>
+                <Route exact path={`${path}/schedule`}>
+                    <Schedule/>
                 </Route>
             </SwitchRoute>
         </div>

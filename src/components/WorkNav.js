@@ -40,7 +40,7 @@ export default function ButtonSizes() {
             <ListItem className={classes.item} button component={NavLink} to={`${url}/report-create`}
                       activeClassName="Mui-selected" exact>
                 <PlaylistAddIcon className={classes.icon}/>
-                <ListItemText primary="Создать новую отчетность"/>
+                <ListItemText primary="Создать новый отчет"/>
             </ListItem>
         </List>
     );

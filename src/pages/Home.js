@@ -1,13 +1,22 @@
 import React from 'react'
+import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 
+const useStyles = makeStyles((theme) => ({
+    list: {
+        fontSize: "larger"
+    }
+}));
+
 export default function Home() {
+    const classes = useStyles();
+
     return (
         <div>
             <Typography variant="h6" component="h3" gutterBottom>
                 Элементы пользовательского сценария:
             </Typography>
-            <ul>
+            <ul className={classes.list}>
                 <li>Список пользователей (в каких случаях необходимо выбирать из списка?)</li>
                 <li>Список отчетностей (сколько примерно отчетностей? поиск необходим? как группировать отчетности?)
                 </li>

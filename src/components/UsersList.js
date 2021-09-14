@@ -7,22 +7,22 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import { useHistory } from "react-router-dom"
+import {usersList} from "../data"
 
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    row: {
+        cursor: "pointer"
+    }
 });
 
-function createData(name, group, lastName, position, osb, tb) {
+function createData([name, group, lastName, position, osb, tb]) {
     return {name, group, lastName, position, osb, tb};
 }
 
-const rows = [
-    createData('dwrep_', 'dep_web_reports', 'Петров', '4200 ЦСКО Волга-сити', 2334, 40),
-    createData('sovrep_', 'sow_web_reports', 'Сидоров', '3800 ЦСКО Ока-сити', 1354, 38),
-    createData('aqrep_', 'aq_web_reports', 'Иванов', '2500 ЦСКО Дон-сити', 9753, 25),
-];
+const rows = usersList.map(el => createData(el))
 
 export default function UserList() {
     const classes = useStyles();
@@ -45,7 +45,7 @@ export default function UserList() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row, index) => (
-                        <TableRow key={index} hover onClick={() => onClickRow(row.name)}>
+                        <TableRow className={classes.row} key={index} hover onClick={() => onClickRow(row.name)}>
                             <TableCell component="td" scope="row">{row.name}</TableCell>
                             <TableCell>{row.group}</TableCell>
                             <TableCell>{row.lastName}</TableCell>

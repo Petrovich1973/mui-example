@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import TemporaryDrawer from "./Drawer"
@@ -53,7 +54,7 @@ export default function MenuAppBar() {
                                 onClick={handleMenu}
                                 color="inherit"
                             >
-                                <AccountCircle fontSize={'large'}/>
+                                <PermIdentityIcon fontSize={'large'}/>
                             </IconButton>
                             <Menu
                                 id="menu-appbar"

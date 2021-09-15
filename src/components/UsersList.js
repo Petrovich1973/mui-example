@@ -1,4 +1,5 @@
 import React from 'react'
+import {ContextApp} from "../reducer.js";
 import {makeStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -25,10 +26,17 @@ function createData([name, group, lastName, position, osb, tb]) {
 const rows = usersList.map(el => createData(el))
 
 export default function UserList() {
+    const {dispatch} = React.useContext(ContextApp);
     const classes = useStyles();
     let history = useHistory();
 
-    const onClickRow = user => history.push(`/users/${user}`);
+    const onClickRow = row => {
+        dispatch({
+            type: 'updateUser',
+            payload: row
+        })
+        history.push(`/users/${row.name}`);
+    }
 
     return (
         <TableContainer>
@@ -45,7 +53,7 @@ export default function UserList() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row, index) => (
-                        <TableRow className={classes.row} key={index} hover onClick={() => onClickRow(row.name)}>
+                        <TableRow className={classes.row} key={index} hover onClick={() => onClickRow(row)}>
                             <TableCell component="td" scope="row">{row.name}</TableCell>
                             <TableCell>{row.group}</TableCell>
                             <TableCell>{row.lastName}</TableCell>

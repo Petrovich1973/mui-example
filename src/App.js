@@ -5,6 +5,7 @@ import {
     Route,
     Redirect
 } from "react-router-dom";
+import {ContextApp, initialState, testReducer} from "./reducer.js";
 import themeDefault from './themes/theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
@@ -16,34 +17,37 @@ import Users from "./pages/Users";
 import Work from "./pages/Work";
 
 export default function App() {
+    const [state, dispatch] = React.useReducer(testReducer, initialState);
 
     return (
-        <ThemeProvider theme={themeDefault}>
-            <CssBaseline/>
-            <Router>
-                <Container maxWidth="lg">
-                    <AppBar/>
-                    <CustomComponent/>
-                    <SwitchRoute>
-                        <Route exact path="/">
-                            {/* eslint-disable-next-line react/jsx-no-undef */}
-                            <Redirect to="/home" />
-                        </Route>
-                        <Route exact path="/users">
-                            <Users />
-                        </Route>
-                        <Route path="/users/:user">
-                            <Work/>
-                        </Route>
-                        <Route path="/reports">
+        <ContextApp.Provider value={{dispatch, state}}>
+            <ThemeProvider theme={themeDefault}>
+                <CssBaseline/>
+                <Router>
+                    <Container maxWidth="lg">
+                        <AppBar/>
+                        <CustomComponent/>
+                        <SwitchRoute>
+                            <Route exact path="/">
+                                {/* eslint-disable-next-line react/jsx-no-undef */}
+                                <Redirect to="/home"/>
+                            </Route>
+                            <Route exact path="/users">
+                                <Users/>
+                            </Route>
+                            <Route path="/users/:user">
+                                <Work/>
+                            </Route>
+                            <Route path="/reports">
 
-                        </Route>
-                        <Route path="/home">
-                            <Home />
-                        </Route>
-                    </SwitchRoute>
-                </Container>
-            </Router>
-        </ThemeProvider>
+                            </Route>
+                            <Route path="/home">
+                                <Home/>
+                            </Route>
+                        </SwitchRoute>
+                    </Container>
+                </Router>
+            </ThemeProvider>
+        </ContextApp.Provider>
     )
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavLink, useParams} from "react-router-dom"
+import {ContextApp} from "../reducer.js";
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import TextField from '@material-ui/core/TextField';
@@ -36,8 +37,12 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         marginTop: theme.spacing(2),
         marginRight: theme.spacing(3),
-        maxWidth: 300,
+        width: 250,
     },
+    radioLabel: {
+        whiteSpace: "nowrap",
+        marginBottom: '10px'
+    }
 }));
 
 const useStylesRadioGroup = makeStyles((theme) => ({
@@ -105,17 +110,24 @@ const defaultDataForm = {
     reportsList: null,
     date: "2021-09-10",
     method: 'tb',
-    schedule: 'now',
-    gosb: 'Выбрать ГОСБ',
-    range: 'daily'
+    execution: 'now',
+    gosb: null,
+    range: 'daily',
+    durationStorage: '1'
 }
+
+const optionsListStorage = [
+    {value: '1', label: '1 день'},
+    {value: '2', label: '2 дня'},
+    {value: '5', label: '5 дней'},
+]
 
 const optionsListMethod = [
     {value: 'tb', label: 'Целиком по ТБ'},
     {value: 'gosb', label: 'По ГОСБ'},
 ]
 
-const optionsListSchedule = [
+const optionsListExecution = [
     {value: 'now', label: 'Сейчас'},
     {value: 'night', label: 'Ночной пакет'},
     {value: 'schedule', label: 'По расписанию'},
@@ -129,6 +141,7 @@ const optionsListRepeat = [
 const optionsListGOSB = ['ОПЕРУ ЦА', 'КРАСНОПРЕСНЕНСКОЕ ОСБ 1569', 'КИЕВСКОЕ ОСЬ 5276']
 
 export default function VerticalLinearStepper() {
+    const {state, dispatch} = React.useContext(ContextApp);
     let {user} = useParams();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -138,7 +151,8 @@ export default function VerticalLinearStepper() {
     const onChangeDataForm = value => {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }
-    console.log(dataForm)
+
+    // console.log(state, dataForm)
 
     function getStepContent(step) {
         switch (step) {
@@ -153,7 +167,7 @@ export default function VerticalLinearStepper() {
                         value={dataForm.reportGroups}
                         onChange={(event, newValue) => {
                             onChangeDataForm({reportGroups: newValue});
-                            handleNext()
+                            if (newValue) handleNext()
                         }}
                         renderInput={(params) => <TextField {...params} variant="outlined"/>}
                     />
@@ -169,7 +183,7 @@ export default function VerticalLinearStepper() {
                         value={dataForm.reportsList}
                         onChange={(event, newValue) => {
                             onChangeDataForm({reportsList: newValue});
-                            handleNext()
+                            if (newValue) handleNext()
                         }}
                         renderInput={(params) => <TextField {...params} variant="outlined"/>}
                     />
@@ -179,7 +193,7 @@ export default function VerticalLinearStepper() {
                     <div>На третем шаге заполняется форма настроки запроса формирования отчета</div>
                     <div style={{display: "flex"}}>
                         <FormControl component="fieldset" className={classes.textField}>
-                            <FormLabel component="legend">Сбособ</FormLabel>
+                            <FormLabel className={classes.radioLabel} component="legend">Сбособ</FormLabel>
                             <RadioGroup value={dataForm.method} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
                                             onChangeDataForm({method: newValue});
@@ -198,25 +212,27 @@ export default function VerticalLinearStepper() {
                             </RadioGroup>
                         </FormControl>
                         {dataForm.method === 'gosb' && <Autocomplete
-                            id="gosn"
+                            id="gosb"
                             size={"medium"}
                             options={optionsListGOSB}
                             getOptionLabel={(option) => option}
                             className={classes.textField}
-                            style={{width: 250}}
+                            style={{width: 250, marginTop: '23px'}}
                             value={dataForm.gosb}
                             onChange={(event, newValue) => {
                                 onChangeDataForm({gosb: newValue});
                             }}
-                            renderInput={(params) => <TextField {...params} variant="outlined"/>}
+                            renderInput={(params) => <TextField
+                                label="ГОСБ" {...params} variant="outlined"/>}
                         />}
                         <FormControl component="fieldset" className={classes.textField}>
-                            <FormLabel component="legend">Расписание запуска</FormLabel>
-                            <RadioGroup value={dataForm.schedule} aria-label="gender" name="customized-radios"
+                            <FormLabel className={classes.radioLabel}
+                                       component="legend">Расписание&nbsp;запуска</FormLabel>
+                            <RadioGroup value={dataForm.execution} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
-                                            onChangeDataForm({schedule: newValue});
+                                            onChangeDataForm({execution: newValue});
                                         }}>
-                                {optionsListSchedule.map((option, idx) => <FormControlLabel
+                                {optionsListExecution.map((option, idx) => <FormControlLabel
                                     key={idx}
                                     value={option.value}
                                     control={<StyledRadio/>}
@@ -229,44 +245,75 @@ export default function VerticalLinearStepper() {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        <div>
-                            {dataForm.schedule === 'schedule' ?
-                            <FormControl component="fieldset" className={classes.textField}>
-                                <FormLabel component="legend">Период запуска</FormLabel>
-                                <RadioGroup value={dataForm.range} aria-label="gender" name="customized-radios"
-                                            onChange={(event, newValue) => {
-                                                onChangeDataForm({range: newValue});
-                                            }}>
-                                    {optionsListRepeat.map((option, idx) => <FormControlLabel
-                                        key={idx}
-                                        value={option.value}
-                                        control={<StyledRadio/>}
-                                        label={option.label}/>)}
-                                </RadioGroup>
-                            </FormControl> :
-                                <TextField
+
+                        <div className={classes.textField} style={{marginTop: '23px'}}>
+                            <TextField
                                 fullWidth
                                 id="date"
                                 variant="outlined"
-                                label="Дата отчета"
+                                label={dataForm.execution === 'schedule' ? "Дата первого отчета" : "Дата отчета"}
                                 type="date"
                                 format="dd/MM/yyyy"
                                 defaultValue={dataForm.date}
-                                className={classes.textField}
                                 InputLabelProps={{
-                                shrink: true,
-                            }}
+                                    shrink: true,
+                                }}
                                 onChange={(event) => {
-                                onChangeDataForm({date: event.target.value});
-                            }}
-                                />}
+                                    onChangeDataForm({date: event.target.value});
+                                }}
+                            />
+                            {dataForm.execution === 'schedule' &&
+                            <>
+                                <div style={{height: '30px'}}/>
+                                <FormControl component="fieldset">
+                                    <FormLabel className={classes.radioLabel} component="legend">Повтор
+                                        запуска</FormLabel>
+                                    <RadioGroup value={dataForm.range} aria-label="gender" name="customized-radios"
+                                                onChange={(event, newValue) => {
+                                                    onChangeDataForm({range: newValue});
+                                                }}>
+                                        {optionsListRepeat.map((option, idx) => <FormControlLabel
+                                            key={idx}
+                                            value={option.value}
+                                            control={<StyledRadio/>}
+                                            label={option.label}/>)}
+                                    </RadioGroup>
+                                </FormControl>
+                            </>
+                            }
                         </div>
+                        <FormControl component="fieldset" className={classes.textField}>
+                            <FormLabel className={classes.radioLabel} component="legend">
+                                Продолжительность хранения</FormLabel>
+                            <RadioGroup value={dataForm.durationStorage} aria-label="gender"
+                                        name="customized-radios"
+                                        onChange={(event, newValue) => {
+                                            onChangeDataForm({durationStorage: newValue});
+                                        }}>
+                                {optionsListStorage.map((option, idx) => <FormControlLabel
+                                    key={idx}
+                                    value={option.value}
+                                    control={<StyledRadio/>}
+                                    label={option.label}/>)}
+                            </RadioGroup>
+                        </FormControl>
+
                     </div>
                 </div>;
             default:
                 return 'Unknown step';
         }
     }
+
+    const handleStart = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        dispatch({
+            type: 'updateListReports',
+            payload: {
+                reportsDoneList: [...state.reportsDoneList, {id: Date.now(), ...dataForm}]
+            }
+        })
+    };
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -298,14 +345,17 @@ export default function VerticalLinearStepper() {
                                     >
                                         Back
                                     </Button>
-                                    <Button
+                                    {activeStep === steps.length - 1 ? <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleStart}
+                                        className={classes.button}
+                                    >Запуск создания отчета</Button> : <Button
                                         variant="contained"
                                         color="primary"
                                         onClick={handleNext}
                                         className={classes.button}
-                                    >
-                                        {activeStep === steps.length - 1 ? 'Запуск создания отчета' : 'Next'}
-                                    </Button>
+                                    >Next</Button>}
                                 </div>
                             </div>
                         </StepContent>

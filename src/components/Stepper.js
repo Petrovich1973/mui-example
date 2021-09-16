@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Link from "@material-ui/core/Link";
-import {reportGroups, reportsList} from "../data"
+import {reportGroups, reportsList, gosbList} from "../data"
 import FormControl from "@material-ui/core/FormControl";
 import {FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
 
@@ -123,7 +123,7 @@ const optionsListStorage = [
 ]
 
 const optionsListMethod = [
-    {value: 'tb', label: 'Целиком по ТБ'},
+    {value: 'tb', label: 'По ТБ'},
     {value: 'gosb', label: 'По ГОСБ'},
 ]
 
@@ -151,8 +151,6 @@ export default function VerticalLinearStepper() {
     const onChangeDataForm = value => {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }
-
-    // console.log(state, dataForm)
 
     function getStepContent(step) {
         switch (step) {
@@ -193,7 +191,7 @@ export default function VerticalLinearStepper() {
                     <div>На третем шаге заполняется форма настроки запроса формирования отчета</div>
                     <div style={{display: "flex"}}>
                         <FormControl component="fieldset" className={classes.textField}>
-                            <FormLabel className={classes.radioLabel} component="legend">Сбособ</FormLabel>
+                            <FormLabel className={classes.radioLabel} component="legend">Способ</FormLabel>
                             <RadioGroup value={dataForm.method} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
                                             onChangeDataForm({method: newValue});
@@ -211,10 +209,10 @@ export default function VerticalLinearStepper() {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        {dataForm.method === 'gosb' && <Autocomplete
+                        {dataForm.method === 'gosb' && <Autocomplete openOnFocus
                             id="gosb"
                             size={"medium"}
-                            options={optionsListGOSB}
+                            options={gosbList.map(([value, label]) => (`${value} ${label}`))}
                             getOptionLabel={(option) => option}
                             className={classes.textField}
                             style={{width: 250, marginTop: '23px'}}
@@ -222,7 +220,7 @@ export default function VerticalLinearStepper() {
                             onChange={(event, newValue) => {
                                 onChangeDataForm({gosb: newValue});
                             }}
-                            renderInput={(params) => <TextField
+                            renderInput={(params) => <TextField autoFocus
                                 label="ГОСБ" {...params} variant="outlined"/>}
                         />}
                         <FormControl component="fieldset" className={classes.textField}>

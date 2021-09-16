@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 import {ContextApp} from "../reducer.js";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -99,9 +100,8 @@ function Row(props) {
 }
 
 export default function ReportsDoneList() {
-    const {state, dispatch} = React.useContext(ContextApp);
+    const {state} = React.useContext(ContextApp);
     Moment.locale('ru');
-    console.log(state)
     const {reportsDoneList = [], user} = state;
     const rows = reportsDoneList.map(row => createData(
         row.reportGroups,
@@ -110,6 +110,14 @@ export default function ReportsDoneList() {
         row.method === 'tb' ? `ТБ ${user && user.tb}` : row.gosb,
         row.durationStorage)
     )
+
+    if(!rows.length) return (
+        <div>
+            <Typography variant={'h6'}>Пока нет доступных отчетов.</Typography>
+            <Typography><Link to={`./report-create`}>Создать отчет</Link></Typography>
+        </div>
+    )
+
     return (
         <TableContainer>
             <Table aria-label="collapsible table">

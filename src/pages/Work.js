@@ -9,8 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import WorkNav from "../components/WorkNav";
 import ReportsDoneList from "../components/ReportsDoneList";
 import Schedule from "../components/Schedule";
-import GroupIcon from '@material-ui/icons/Group';
 import {Breadcrumbs} from "@material-ui/core";
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import Link from "@material-ui/core/Link";
 import ReportCreate from "../components/ReportCreate";
 import Box from "@material-ui/core/Box";
@@ -22,8 +22,6 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         marginRight: theme.spacing(0.5),
-        width: 20,
-        height: 20,
     }
 }));
 
@@ -35,7 +33,7 @@ export default function Work() {
         <div>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" href="/users" className={classes.link}>
-                    <GroupIcon className={classes.icon}/>
+                    <PeopleOutlineIcon fontSize="medium" className={classes.icon}/>
                 </Link>
                 <Typography component='div' color="textPrimary" className={classes.link}>
                     <Typography variant="caption" display="block">

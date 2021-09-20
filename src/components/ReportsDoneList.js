@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Moment from 'moment';
+import {CircularProgress} from "@material-ui/core";
 
 const useRowStyles = makeStyles({
     root: {
@@ -24,19 +25,36 @@ const useRowStyles = makeStyles({
     },
 });
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(name, calories, fat, carbs, protein, status) {
     return {
         name,
         calories,
         fat,
         carbs,
         protein,
+        status,
         price: 'Ожидает запуска',
         history: [
-            {date: '2020-01-05', customerId: '11091700', amount: 3},
-            {date: '2020-01-02', customerId: 'Anonymous', amount: 1},
+            {date: '2020-01-05', customerId: 'dragon1', amount: 3},
         ],
     };
+}
+
+function getStatusRow(status) {
+    switch (status) {
+        case 'waiting':
+            return <CircularProgress size={18}/>
+        case 'complete':
+            return 'Complete'
+        default:
+            return null
+    }
+}
+
+function delay(ms) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+    });
 }
 
 function Row(props) {
@@ -45,7 +63,7 @@ function Row(props) {
     const classes = useRowStyles();
 
     return (
-        <React.Fragment>
+        <>
             <TableRow className={classes.root}>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -59,19 +77,20 @@ function Row(props) {
                 <TableCell>{row.fat}</TableCell>
                 <TableCell>{row.carbs}</TableCell>
                 <TableCell>{row.protein}</TableCell>
+                <TableCell>{getStatusRow(row.status)}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                History
+                                Детали отчета
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
+                                        <TableCell>Дата создания</TableCell>
+                                        <TableCell>Автор</TableCell>
                                         <TableCell align="right">Amount</TableCell>
                                         <TableCell align="right">Total price ($)</TableCell>
                                     </TableRow>
@@ -95,7 +114,7 @@ function Row(props) {
                     </Collapse>
                 </TableCell>
             </TableRow>
-        </React.Fragment>
+        </>
     );
 }
 
@@ -108,7 +127,8 @@ export default function ReportsDoneList() {
         row.reportsList,
         Moment(row.date).format('DD.MM.YYYY'),
         row.method === 'tb' ? `ТБ ${user && user.tb}` : row.gosb,
-        row.durationStorage)
+        row.durationStorage,
+        row.status)
     )
 
     if(!rows.length) return (
@@ -132,7 +152,7 @@ export default function ReportsDoneList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row, idx) => (
+                    {rows.reverse().map((row, idx) => (
                         <Row key={idx} row={row}/>
                     ))}
                 </TableBody>

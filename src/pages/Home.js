@@ -4,7 +4,8 @@ import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
     list: {
-        fontSize: "larger"
+        fontSize: "larger",
+        lineHeight: 2
     }
 }));
 

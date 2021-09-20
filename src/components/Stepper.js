@@ -101,10 +101,6 @@ function StyledRadio(props) {
     );
 }
 
-function getSteps() {
-    return ['Выбор группы отчетности', 'Выбор отчета', 'Конфигурация отчета'];
-}
-
 const defaultDataForm = {
     reportGroups: null,
     reportsList: null,
@@ -113,7 +109,8 @@ const defaultDataForm = {
     execution: 'now',
     gosb: null,
     range: 'daily',
-    durationStorage: '1'
+    durationStorage: '1',
+    status: 'waiting'
 }
 
 const optionsListStorage = [
@@ -123,8 +120,8 @@ const optionsListStorage = [
 ]
 
 const optionsListMethod = [
-    {value: 'tb', label: 'По ТБ'},
-    {value: 'gosb', label: 'По ГОСБ'},
+    {value: 'tb', label: 'ТБ'},
+    {value: 'gosb', label: 'ГОСБ'},
 ]
 
 const optionsListExecution = [
@@ -148,6 +145,14 @@ export default function VerticalLinearStepper() {
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const steps = getSteps();
 
+    function getSteps() {
+        return [
+            activeStep !== 0 && dataForm.reportGroups ? dataForm.reportGroups : 'Выбор группы отчетности',
+            activeStep !== 1 && dataForm.reportsList ? dataForm.reportsList : 'Выбор отчета',
+            'Конфигурация отчета'
+        ];
+    }
+    console.log(dataForm)
     const onChangeDataForm = value => {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }
@@ -191,7 +196,7 @@ export default function VerticalLinearStepper() {
                     <div>На третем шаге заполняется форма настроки запроса формирования отчета</div>
                     <div style={{display: "flex"}}>
                         <FormControl component="fieldset" className={classes.textField}>
-                            <FormLabel className={classes.radioLabel} component="legend">Способ</FormLabel>
+                            <FormLabel className={classes.radioLabel} component="legend">Структурная единица</FormLabel>
                             <RadioGroup value={dataForm.method} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
                                             onChangeDataForm({method: newValue});
@@ -225,7 +230,7 @@ export default function VerticalLinearStepper() {
                         />}
                         <FormControl component="fieldset" className={classes.textField}>
                             <FormLabel className={classes.radioLabel}
-                                       component="legend">Расписание&nbsp;запуска</FormLabel>
+                                       component="legend">Условие&nbsp;запуска</FormLabel>
                             <RadioGroup value={dataForm.execution} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
                                             onChangeDataForm({execution: newValue});
@@ -249,7 +254,7 @@ export default function VerticalLinearStepper() {
                                 fullWidth
                                 id="date"
                                 variant="outlined"
-                                label={dataForm.execution === 'schedule' ? "Дата первого отчета" : "Дата отчета"}
+                                label={dataForm.execution === 'schedule' ? "Дата первого запуска" : "Дата отчета"}
                                 type="date"
                                 format="dd/MM/yyyy"
                                 defaultValue={dataForm.date}
@@ -282,7 +287,7 @@ export default function VerticalLinearStepper() {
                         </div>
                         <FormControl component="fieldset" className={classes.textField}>
                             <FormLabel className={classes.radioLabel} component="legend">
-                                Продолжительность хранения</FormLabel>
+                                Хранение</FormLabel>
                             <RadioGroup value={dataForm.durationStorage} aria-label="gender"
                                         name="customized-radios"
                                         onChange={(event, newValue) => {

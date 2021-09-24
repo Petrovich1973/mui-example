@@ -6,7 +6,7 @@ export default function Users() {
     return (
         <div>
             <Typography variant="h6" component="h3" gutterBottom>
-                Поьзователи АС BackOffice
+                Роли АС BackOffice
             </Typography>
             <UsersList/>
         </div>

@@ -135,8 +135,6 @@ const optionsListRepeat = [
     {value: 'monthly', label: 'Ежемесячный ночной запуск'},
 ]
 
-const optionsListGOSB = ['ОПЕРУ ЦА', 'КРАСНОПРЕСНЕНСКОЕ ОСБ 1569', 'КИЕВСКОЕ ОСЬ 5276']
-
 export default function VerticalLinearStepper() {
     const {state, dispatch} = React.useContext(ContextApp);
     let {user} = useParams();
@@ -152,7 +150,7 @@ export default function VerticalLinearStepper() {
             'Конфигурация отчета'
         ];
     }
-    console.log(dataForm)
+
     const onChangeDataForm = value => {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }

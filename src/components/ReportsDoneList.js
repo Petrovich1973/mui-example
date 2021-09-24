@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Moment from 'moment';
 import {CircularProgress} from "@material-ui/core";
 
@@ -45,7 +46,7 @@ function getStatusRow(status) {
         case 'waiting':
             return <CircularProgress size={18}/>
         case 'complete':
-            return 'Complete'
+            return <CheckCircleOutlineIcon size={18}/>
         default:
             return null
     }
@@ -119,17 +120,35 @@ function Row(props) {
 }
 
 export default function ReportsDoneList() {
-    const {state} = React.useContext(ContextApp);
+    const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const {reportsDoneList = [], user} = state;
-    const rows = reportsDoneList.map(row => createData(
+    const [rows, setRows] = React.useState([])
+
+    const createRows = React.useCallback(() => reportsDoneList.map(row => createData(
         row.reportGroups,
         row.reportsList,
         Moment(row.date).format('DD.MM.YYYY'),
         row.method === 'tb' ? `ТБ ${user && user.tb}` : row.gosb,
         row.durationStorage,
         row.status)
-    )
+    ), [user, reportsDoneList])
+
+    const validateStatus = React.useCallback(() => {
+        if(reportsDoneList.some(el => el.status === 'waiting')) delay(5000).then(() => {
+            dispatch({
+                type: 'updateListReports',
+                payload: {
+                    reportsDoneList: reportsDoneList.map(el => ({...el, status: 'complete'}))
+                }
+            })
+        })
+    }, [dispatch, reportsDoneList])
+
+    React.useEffect(() => {
+        setRows(createRows())
+        validateStatus()
+    }, [createRows, validateStatus])
 
     if(!rows.length) return (
         <div>

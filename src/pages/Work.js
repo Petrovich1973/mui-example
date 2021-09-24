@@ -29,6 +29,7 @@ export default function Work() {
     const classes = useStyles();
     let {user} = useParams();
     let {path, url} = useRouteMatch();
+
     return (
         <div>
             <Breadcrumbs aria-label="breadcrumb">
@@ -37,7 +38,7 @@ export default function Work() {
                 </Link>
                 <Typography component='div' color="textPrimary" className={classes.link}>
                     <Typography variant="caption" display="block">
-                        пользователь
+                        роль
                     </Typography>
                     <div style={{width: 10}}/>
                     <Box fontWeight='fontWeightBold' display='block'>{user}</Box>

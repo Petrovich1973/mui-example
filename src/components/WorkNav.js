@@ -27,7 +27,7 @@ export default function ButtonSizes() {
 
     return (
         <List className={classes.root}>
-            <ListItem className={classes.item} button component={NavLink} to={`${url}/reports-done`}
+            <ListItem className={classes.item} button component={NavLink} to={`${url}/reports`}
                       activeClassName="Mui-selected" exact>
                 <ListIcon className={classes.icon}/>
                 <ListItemText primary="Доступные отчетности"/>

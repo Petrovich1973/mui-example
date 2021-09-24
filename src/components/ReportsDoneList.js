@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, useRouteMatch, useHistory} from "react-router-dom";
 import {ContextApp} from "../reducer.js";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -17,29 +17,17 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Moment from 'moment';
 import {CircularProgress} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
-const useRowStyles = makeStyles({
+const useRowStyles = makeStyles(theme => ({
     root: {
         '& > *': {
             borderBottom: 'unset',
         },
     },
-});
+}));
 
-function createData(name, calories, fat, carbs, protein, status) {
-    return {
-        name,
-        calories,
-        fat,
-        carbs,
-        protein,
-        status,
-        price: 'Ожидает запуска',
-        history: [
-            {date: '2020-01-05', customerId: 'dragon1', amount: 3},
-        ],
-    };
-}
+
 
 function getStatusRow(status) {
     switch (status) {
@@ -48,7 +36,7 @@ function getStatusRow(status) {
         case 'complete':
             return <CheckCircleOutlineIcon size={18}/>
         default:
-            return null
+            return <CircularProgress size={18}/>
     }
 }
 
@@ -59,9 +47,15 @@ function delay(ms) {
 }
 
 function Row(props) {
+    let history = useHistory();
     const {row} = props;
     const [open, setOpen] = React.useState(false);
+    let {url} = useRouteMatch();
     const classes = useRowStyles();
+
+    const handleDownloadButton = r => {
+        history.push(`${url}/${r.calories}`);
+    }
 
     return (
         <>
@@ -92,8 +86,8 @@ function Row(props) {
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>
                                         <TableCell>Автор</TableCell>
-                                        <TableCell align="right">Amount</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
+                                        <TableCell align="right"/>
+                                        <TableCell align="right"/>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -103,9 +97,19 @@ function Row(props) {
                                                 {historyRow.date}
                                             </TableCell>
                                             <TableCell>{historyRow.customerId}</TableCell>
-                                            <TableCell align="right">{historyRow.amount}</TableCell>
                                             <TableCell align="right">
-                                                Some data
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => handleDownloadButton(row)}
+                                                >Смотреть</Button>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Button
+                                                    variant="contained"
+                                                    color="inherit"
+                                                    onClick={() => handleDownloadButton(row)}
+                                                >Скачать</Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -125,14 +129,31 @@ export default function ReportsDoneList() {
     const {reportsDoneList = [], user} = state;
     const [rows, setRows] = React.useState([])
 
+    const createData = React.useCallback((id, name, calories, fat, carbs, protein, status) => {
+        return {
+            id,
+            name,
+            calories,
+            fat,
+            carbs,
+            protein,
+            status,
+            price: 'Ожидает запуска',
+            history: [
+                {date: '2020-01-05', customerId: user.name, amount: 3},
+            ],
+        };
+    }, [user])
+
     const createRows = React.useCallback(() => reportsDoneList.map(row => createData(
+        row.id,
         row.reportGroups,
         row.reportsList,
         Moment(row.date).format('DD.MM.YYYY'),
-        row.method === 'tb' ? `ТБ ${user && user.tb}` : row.gosb,
+        row.method === 'tb' ? `${user && user.tb} ТБ` : row.gosb,
         row.durationStorage,
         row.status)
-    ), [user, reportsDoneList])
+    ), [user, reportsDoneList, createData])
 
     const validateStatus = React.useCallback(() => {
         if(reportsDoneList.some(el => el.status === 'waiting')) delay(5000).then(() => {

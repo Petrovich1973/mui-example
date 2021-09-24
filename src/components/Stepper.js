@@ -119,11 +119,6 @@ const optionsListStorage = [
     {value: '5', label: '5 дней'},
 ]
 
-const optionsListMethod = [
-    {value: 'tb', label: 'ТБ'},
-    {value: 'gosb', label: 'ГОСБ'},
-]
-
 const optionsListExecution = [
     {value: 'now', label: 'Сейчас'},
     {value: 'night', label: 'Ночной пакет'},
@@ -138,10 +133,16 @@ const optionsListRepeat = [
 export default function VerticalLinearStepper() {
     const {state, dispatch} = React.useContext(ContextApp);
     let {user} = useParams();
+    const {tb = ''} = state.user
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const steps = getSteps();
+
+    const optionsListMethod = [
+        {value: 'tb', label: `${tb} ТБ`},
+        {value: 'gosb', label: 'ГОСБ'},
+    ]
 
     function getSteps() {
         return [
@@ -370,7 +371,7 @@ export default function VerticalLinearStepper() {
                         обработку</strong></Typography>
                     <Typography>
                         Данный отчет помещен в список доступных отчетов.
-                        <Link component={NavLink} to={`/users/${user}/reports-done`}>Смотреть</Link>
+                        <Link component={NavLink} to={`/users/${user}/reports`}>Смотреть</Link>
                     </Typography>
                     <Button onClick={handleReset} className={classes.button}>
                         Создать новый отчет

@@ -1,9 +1,11 @@
 import React from "react";
 import {makeStyles} from '@material-ui/core/styles';
-import {Redirect, useParams, useRouteMatch, useLocation, useHistory} from "react-router-dom";
 import {
     Switch as SwitchRoute,
-    Route
+    Route,
+    Redirect,
+    useParams,
+    useRouteMatch
 } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import WorkNav from "../components/WorkNav";
@@ -39,6 +41,8 @@ export default function Work() {
     let {user} = useParams();
     let {path, url} = useRouteMatch();
 
+    console.log(useRouteMatch())
+
     const setUsers = React.useCallback( () => {
         const res = usersList.map(el => createData(el)).find(el => el.name === user)
         dispatch({
@@ -53,17 +57,17 @@ export default function Work() {
 
     const setBr = React.useCallback(() => {
         dispatch({
-            type: 'updateListReports',
+            type: 'updateState',
             payload: {br: {...state.br, brUser: user}}
         })
-    }, [])
+    }, [dispatch, user])
 
     React.useEffect(() => {
         setBr()
-    }, [])
+    }, [setBr])
 
     return (
-        <div>
+        <>
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" href="/users" className={classes.link}>
                     <PeopleOutlineIcon fontSize="medium" className={classes.icon}/>
@@ -96,7 +100,7 @@ export default function Work() {
                 <Route exact path={`${path}/reports`}>
                     <ReportsDoneList/>
                 </Route>
-                <Route exact path={`${path}/reports/:report`}>
+                <Route path={`${path}/reports/:report`}>
                     <ReportDetail/>
                 </Route>
                 <Route exact path={`${path}/schedule`}>
@@ -106,6 +110,6 @@ export default function Work() {
                     <ReportCreate/>
                 </Route>
             </SwitchRoute>
-        </div>
+        </>
     )
 }

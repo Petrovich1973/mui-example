@@ -20,7 +20,7 @@ export default function App() {
     const [state, dispatch] = React.useReducer(testReducer, initialState);
 
     return (
-        <ContextApp.Provider value={{dispatch, state}}>
+        <ContextApp.Provider value={{state, dispatch}}>
             <ThemeProvider theme={themeDefault}>
                 <CssBaseline/>
                 <Router>

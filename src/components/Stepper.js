@@ -310,7 +310,7 @@ export default function VerticalLinearStepper() {
     const handleStart = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         dispatch({
-            type: 'updateListReports',
+            type: 'updateState',
             payload: {
                 reportsDoneList: [...state.reportsDoneList, {id: Date.now(), ...dataForm}]
             }

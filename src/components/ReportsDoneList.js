@@ -127,6 +127,7 @@ export default function ReportsDoneList() {
     const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const {reportsDoneList = [], user} = state;
+
     const [rows, setRows] = React.useState([])
 
     const createData = React.useCallback((id, name, calories, fat, carbs, protein, status) => {
@@ -158,7 +159,7 @@ export default function ReportsDoneList() {
     const validateStatus = React.useCallback(() => {
         if(reportsDoneList.some(el => el.status === 'waiting')) delay(5000).then(() => {
             dispatch({
-                type: 'updateListReports',
+                type: 'updateState',
                 payload: {
                     reportsDoneList: reportsDoneList.map(el => ({...el, status: 'complete'}))
                 }

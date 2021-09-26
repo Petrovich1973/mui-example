@@ -32,7 +32,7 @@ export const initialState = {
 
 export const testReducer = (state, action) => {
     switch(action.type) {
-        case 'updateListReports':
+        case 'updateState':
             return {
                 ...state,
                 ...action.payload

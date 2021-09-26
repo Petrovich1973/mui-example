@@ -1,8 +1,9 @@
 import React from 'react';
 import {ContextApp} from "../reducer";
-import {useHistory, useParams} from "react-router-dom";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import {useParams} from "react-router-dom";
+import { DataGrid } from '@mui/x-data-grid';
 import axios from "axios";
+import {Button} from "@material-ui/core";
 
 const columns = [
     {
@@ -33,12 +34,12 @@ const columns = [
     {
         field: 'openday',
         headerName: 'openDay',
-        width: 140
+        width: 190
     },
     {
         field: 'expirationday',
         headerName: 'expirationDay',
-        width: 170
+        width: 190
     },
     {
         field: 'balance',
@@ -48,7 +49,7 @@ const columns = [
 ];
 
 export default function ReportDetail() {
-    let {user, report} = useParams();
+    let {report} = useParams();
     const {state, dispatch} = React.useContext(ContextApp);
     const [data, setData] = React.useState(null)
 
@@ -57,32 +58,33 @@ export default function ReportDetail() {
             const result = await axios(
                 '/report',
             );
-
             setData(result.data);
         };
         fetchData();
     }, []);
 
     const setBr = React.useCallback(() => {
+
         dispatch({
-            type: 'updateListReports',
+            type: 'updateState',
             payload: {br: {...state.br, brReport: report}}
         })
-    }, [])
+    }, [state, dispatch, report])
 
     React.useEffect(() => {
         setBr()
-    }, [])
+    }, [data])
 
     return (
         <>
+            <Button onClick={setBr}>Add params</Button>
             <div/>
             {data && <div style={{ height: 630, width: '100%' }}>
                 <DataGrid
                     rows={data}
                     columns={columns}
                     pageSize={10}
-                    rowsPerPageOptions={[10, 20, 40]}
+                    rowsPerPageOptions={[10]}
                 />
             </div>}
         </>

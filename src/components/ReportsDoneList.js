@@ -25,21 +25,24 @@ const useRowStyles = makeStyles(theme => ({
             borderBottom: 'unset',
         },
     },
+    nowrap: {
+        whiteSpace: 'nowrap'
+    }
 }));
-
 
 
 function getStatusRow(status) {
     switch (status) {
         case 'waiting':
-            return <CircularProgress size={18}/>
+            return <CircularProgress size={18} style={{margin: '0 auto', display: 'block'}}/>
         case 'complete':
-            return <CheckCircleOutlineIcon size={18}/>
+            return <CheckCircleOutlineIcon size={18} style={{margin: '0 auto', display: 'block'}}/>
         default:
-            return <CircularProgress size={18}/>
+            return <CircularProgress size={18} style={{margin: '0 auto', display: 'block'}}/>
     }
 }
 
+// Эмулятор ожидания создания отчета
 function delay(ms) {
     return new Promise((resolve, reject) => {
         setTimeout(resolve, ms);
@@ -65,14 +68,11 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
-                    {row.name}
-                </TableCell>
+                <TableCell component="th" scope="row">{row.name}</TableCell>
                 <TableCell>{row.calories}</TableCell>
                 <TableCell>{row.fat}</TableCell>
-                <TableCell>{row.carbs}</TableCell>
-                <TableCell>{row.protein}</TableCell>
-                <TableCell>{getStatusRow(row.status)}</TableCell>
+                <TableCell className={classes.nowrap}>{row.carbs}</TableCell>
+                <TableCell align="right" style={{verticalAlign: 'middle'}}>{getStatusRow(row.status)}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -86,25 +86,27 @@ function Row(props) {
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>
                                         <TableCell>Автор</TableCell>
-                                        <TableCell align="right"/>
-                                        <TableCell align="right"/>
+                                        <TableCell>Хранение</TableCell>
+                                        <TableCell width={100}/>
+                                        <TableCell width={100}/>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.history.map((historyRow) => (
                                         <TableRow key={historyRow.date}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell>
                                                 {historyRow.date}
                                             </TableCell>
                                             <TableCell>{historyRow.customerId}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell>{historyRow.protein} д.</TableCell>
+                                            <TableCell>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     onClick={() => handleDownloadButton(row)}
                                                 >Смотреть</Button>
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell>
                                                 <Button
                                                     variant="contained"
                                                     color="inherit"
@@ -137,11 +139,13 @@ export default function ReportsDoneList() {
             calories,
             fat,
             carbs,
-            protein,
             status,
-            price: 'Ожидает запуска',
             history: [
-                {date: '2020-01-05', customerId: user.name, amount: 3},
+                {
+                    date: '2020-01-05',
+                    customerId: user.name,
+                    protein
+                },
             ],
         };
     }, [user])
@@ -151,13 +155,14 @@ export default function ReportsDoneList() {
         row.reportGroups,
         row.reportsList,
         Moment(row.date).format('DD.MM.YYYY'),
-        row.method === 'tb' ? `${user && user.tb} ТБ` : row.gosb,
+        `${user && user.tb}ТБ ${row.gosb ? `/ ${row.gosb}` : ''} ${row.gosb && row.vsp ? `/ ${row.vsp}` : ''}`,
         row.durationStorage,
         row.status)
     ), [user, reportsDoneList, createData])
 
+    // Эмуляция изменения статуса готовности отчета
     const validateStatus = React.useCallback(() => {
-        if(reportsDoneList.some(el => el.status === 'waiting')) delay(5000).then(() => {
+        if (reportsDoneList.some(el => el.status === 'waiting')) delay(7000).then(() => {
             dispatch({
                 type: 'updateState',
                 payload: {
@@ -172,7 +177,7 @@ export default function ReportsDoneList() {
         validateStatus()
     }, [createRows, validateStatus])
 
-    if(!rows.length) return (
+    if (!rows.length) return (
         <div>
             <Typography variant={'h6'}>Пока нет доступных отчетов.</Typography>
             <Typography><Link to={`./report-create`}>Создать отчет</Link></Typography>
@@ -189,7 +194,7 @@ export default function ReportsDoneList() {
                         <TableCell>Отчет</TableCell>
                         <TableCell>Дата&nbsp;отчета</TableCell>
                         <TableCell>Масштаб</TableCell>
-                        <TableCell>Хранение&nbsp;(дней)</TableCell>
+                        <TableCell/>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Link from "@material-ui/core/Link";
-import {reportGroups, reportsList, gosbList} from "../data"
+import {reportGroups, reportsList, gosbList, vspList} from "../data"
 import FormControl from "@material-ui/core/FormControl";
 import {FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
 
@@ -108,6 +108,7 @@ const defaultDataForm = {
     method: 'tb',
     execution: 'now',
     gosb: null,
+    vsp: null,
     range: 'daily',
     durationStorage: '1',
     status: 'waiting'
@@ -213,20 +214,38 @@ export default function VerticalLinearStepper() {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        {dataForm.method === 'gosb' && <Autocomplete openOnFocus
-                            id="gosb"
-                            size={"medium"}
-                            options={gosbList.map(([value, label]) => (`${value} ${label}`))}
-                            getOptionLabel={(option) => option}
-                            className={classes.textField}
-                            style={{width: 250, marginTop: '23px'}}
-                            value={dataForm.gosb}
-                            onChange={(event, newValue) => {
-                                onChangeDataForm({gosb: newValue});
-                            }}
-                            renderInput={(params) => <TextField autoFocus
-                                label="ГОСБ" {...params} variant="outlined"/>}
-                        />}
+                        {dataForm.method === 'gosb' && <div className={classes.textField} style={{marginTop: '23px'}}>
+                            <Autocomplete
+                                openOnFocus
+                                id="gosb"
+                                size={"medium"}
+                                options={gosbList.map(([value, label]) => (`${label}`))}
+                                getOptionLabel={(option) => option}
+                                style={{width: 250}}
+                                value={dataForm.gosb}
+                                onChange={(event, newValue) => {
+                                    onChangeDataForm({gosb: newValue});
+                                }}
+                                renderInput={(params) => <TextField autoFocus
+                                                                    label="ГОСБ" {...params}
+                                                                    variant="outlined"/>}
+                            />
+                            {dataForm.gosb && <Autocomplete
+                                id="vsp"
+                                size={"medium"}
+                                options={vspList.map(([label]) => (`${label}`))}
+                                getOptionLabel={(option) => option}
+                                className={classes.textField}
+                                style={{width: 250, marginTop: '23px'}}
+                                value={dataForm.vsp}
+                                onChange={(event, newValue) => {
+                                    onChangeDataForm({vsp: newValue});
+                                }}
+                                renderInput={(params) => <TextField autoFocus
+                                                                    label="ВСП" {...params}
+                                                                    variant="outlined"/>}
+                            />}
+                        </div>}
                         <FormControl component="fieldset" className={classes.textField}>
                             <FormLabel className={classes.radioLabel}
                                        component="legend">Условие&nbsp;запуска</FormLabel>

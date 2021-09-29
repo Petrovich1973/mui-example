@@ -5,29 +5,33 @@ import {
     Route,
     Redirect,
     useParams,
-    useRouteMatch
+    useRouteMatch,
+    Link
 } from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
+import useBreadcrumbs from 'use-react-router-breadcrumbs';
+import {Breadcrumbs, Box, Typography} from "@material-ui/core";
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import WorkNav from "../components/WorkNav";
 import ReportsDoneList from "../components/ReportsDoneList";
 import Schedule from "../components/Schedule";
-import {Breadcrumbs} from "@material-ui/core";
-import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
-import Link from "@material-ui/core/Link";
 import ReportCreate from "../components/ReportCreate";
-import Box from "@material-ui/core/Box";
 import {ContextApp} from "../reducer";
 import {usersList} from "../data"
 import ReportDetail from "../components/ReportDetail";
-import {useBreadcrumbsActions} from "../utils/useBreadcrumbsActions";
 
 const useStyles = makeStyles((theme) => ({
     link: {
         display: 'flex',
-        alignItems: "flex-end"
+        alignItems: "center",
+        color: 'inherit',
+        textDecoration: "none",
+        textTransform: "none"
     },
     icon: {
         marginRight: theme.spacing(0.5),
+    },
+    separator: {
+        lineHeight: 2
     }
 }));
 
@@ -35,17 +39,58 @@ function createData([name, group, lastName, position, osb, tb]) {
     return {name, group, lastName, position, osb, tb};
 }
 
+const BreadcrumbsUsers = () => (
+    <React.Fragment>
+        <PeopleOutlineIcon fontSize="medium" className={useStyles().icon}/>
+    </React.Fragment>
+)
+const BreadcrumbsUser = ({match}) => {
+    return (
+        <React.Fragment>
+            <Typography variant="caption" display="block">роль</Typography>
+            <div style={{width: 4}}/>
+            <Box fontWeight='fontWeightBold' display='block'>{match.params.user}</Box>
+        </React.Fragment>
+    )
+}
+
+const BreadcrumbsReport = ({match}) => {
+    return (
+        <React.Fragment>
+            <Typography variant="caption" display="block">отчет</Typography>
+            <div style={{width: 4}}/>
+            <Box fontWeight='fontWeightBold' display='block'>{match.params.report}</Box>
+        </React.Fragment>
+    )
+}
+
+const routeConfig = [
+    {
+        path: "/users",
+        breadcrumb: BreadcrumbsUsers,
+    },
+    {
+        path: "/users/:user",
+        breadcrumb: BreadcrumbsUser,
+    },
+    {
+        path: "/users/:user/reports/:report",
+        breadcrumb: BreadcrumbsReport,
+    }
+];
+
 export default function Work() {
-    const {state, dispatch} = React.useContext(ContextApp);
+    const {dispatch} = React.useContext(ContextApp);
     let {user} = useParams();
     let {path, url} = useRouteMatch();
-    let {br: {brUser = null, brReport = null}} = state
-    useBreadcrumbsActions('brUser', user)
+    const breadcrumbs = useBreadcrumbs(routeConfig, {
+        excludePaths: ['/', '/users/:user/reports']
+    });
+
     const classes = useStyles();
 
-    console.log(useRouteMatch())
-
-    const setUsers = React.useCallback( () => {
+    // Нахожу пользователя в списке пользователей по параметру роутера и сохраняю его в reducer
+    const setUsers = React.useCallback(() => {
         const res = usersList.map(el => createData(el)).find(el => el.name === user)
         dispatch({
             type: 'updateUser',
@@ -59,24 +104,14 @@ export default function Work() {
 
     return (
         <>
-            <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" href="/users" className={classes.link}>
-                    <PeopleOutlineIcon fontSize="medium" className={classes.icon}/>
-                </Link>
-                {brUser && <Typography component='div' color="textPrimary" className={classes.link}>
-                    <Typography variant="caption" display="block">
-                        роль
-                    </Typography>
-                    <div style={{width: 10}}/>
-                    <Box fontWeight='fontWeightBold' display='block'>{brUser}</Box>
-                </Typography>}
-                {brReport && <Typography component='div' color="textPrimary" className={classes.link}>
-                    <Typography variant="caption" display="block">
-                        отчет
-                    </Typography>
-                    <div style={{width: 10}}/>
-                    <Box fontWeight='fontWeightBold' display='block'>{brReport}</Box>
-                </Typography>}
+
+            <Breadcrumbs aria-label="breadcrumb" separator="›">
+                {breadcrumbs.map(({match, breadcrumb}, idx) => (
+                    <Link
+                        to={match.url}
+                        key={idx}
+                        className={classes.link}>{breadcrumb}</Link>
+                ))}
             </Breadcrumbs>
 
             <WorkNav/>
@@ -88,18 +123,10 @@ export default function Work() {
                     {/* eslint-disable-next-line react/jsx-no-undef */}
                     <Redirect to={`${url}/reports`}/>
                 </Route>
-                <Route exact path={`${path}/reports`}>
-                    <ReportsDoneList/>
-                </Route>
-                <Route path={`${path}/reports/:report`}>
-                    <ReportDetail/>
-                </Route>
-                <Route exact path={`${path}/schedule`}>
-                    <Schedule/>
-                </Route>
-                <Route exact path={`${path}/report-create`}>
-                    <ReportCreate/>
-                </Route>
+                <Route exact path={`${path}/reports`} component={ReportsDoneList} icon={'Длиннннннннное reports'}/>
+                <Route path={`${path}/reports/:report`} component={ReportDetail} icon={'Длинннннннннное report'}/>
+                <Route exact path={`${path}/schedule`} component={Schedule}/>
+                <Route exact path={`${path}/report-create`} component={ReportCreate}/>
             </SwitchRoute>
         </>
     )

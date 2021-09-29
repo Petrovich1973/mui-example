@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import { DataGrid } from '@mui/x-data-grid';
 import axios from "axios";
 import {Button} from "@material-ui/core";
+import {useBreadcrumbsActions} from "../utils/useBreadcrumbsActions";
 
 const columns = [
     {
@@ -50,7 +51,7 @@ const columns = [
 
 export default function ReportDetail() {
     let {report} = useParams();
-    const {state, dispatch} = React.useContext(ContextApp);
+    useBreadcrumbsActions('brReport', report)
     const [data, setData] = React.useState(null)
 
     React.useEffect(() => {
@@ -63,22 +64,8 @@ export default function ReportDetail() {
         fetchData();
     }, []);
 
-    const setBr = React.useCallback(() => {
-
-        dispatch({
-            type: 'updateState',
-            payload: {br: {...state.br, brReport: report}}
-        })
-    }, [state, dispatch, report])
-
-    React.useEffect(() => {
-        setBr()
-    }, [data])
-
     return (
         <>
-            <Button onClick={setBr}>Add params</Button>
-            <div/>
             {data && <div style={{ height: 630, width: '100%' }}>
                 <DataGrid
                     rows={data}

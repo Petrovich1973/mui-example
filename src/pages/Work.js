@@ -19,6 +19,7 @@ import Box from "@material-ui/core/Box";
 import {ContextApp} from "../reducer";
 import {usersList} from "../data"
 import ReportDetail from "../components/ReportDetail";
+import {useBreadcrumbsActions} from "../utils/useBreadcrumbsActions";
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -36,10 +37,11 @@ function createData([name, group, lastName, position, osb, tb]) {
 
 export default function Work() {
     const {state, dispatch} = React.useContext(ContextApp);
-    const classes = useStyles();
-    let {brUser = null, brReport = null} = state.br
     let {user} = useParams();
     let {path, url} = useRouteMatch();
+    let {br: {brUser = null, brReport = null}} = state
+    useBreadcrumbsActions('brUser', user)
+    const classes = useStyles();
 
     console.log(useRouteMatch())
 
@@ -54,17 +56,6 @@ export default function Work() {
     React.useEffect(() => {
         setUsers()
     }, [setUsers])
-
-    const setBr = React.useCallback(() => {
-        dispatch({
-            type: 'updateState',
-            payload: {br: {...state.br, brUser: user}}
-        })
-    }, [dispatch, user])
-
-    React.useEffect(() => {
-        setBr()
-    }, [setBr])
 
     return (
         <>

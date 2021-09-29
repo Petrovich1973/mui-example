@@ -27,7 +27,10 @@ export const initialState = {
         }
     ],
     user: {},
-    br: {}
+    br: {
+        brUser: null,
+        brReport: null
+    }
 };
 
 export const testReducer = (state, action) => {

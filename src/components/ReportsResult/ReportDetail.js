@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import {DataGrid} from '@mui/x-data-grid';
 import axios from "axios";
 
 const columns = [
@@ -49,18 +49,21 @@ export default function ReportDetail() {
     const [data, setData] = React.useState(null)
 
     React.useEffect(() => {
+
         const fetchData = async () => {
-            const result = await axios(
-                '/report',
-            );
-            setData(result.data);
+            const result = await axios('/report');
+            return result.data
         };
-        fetchData();
+
+        fetchData()
+            .then(res => setData(res))
+            .catch(err => console.error(err));
+
     }, []);
 
     return (
         <>
-            {data && <div style={{ height: 630, width: '100%' }}>
+            {data && <div style={{height: 630, width: '100%'}}>
                 <DataGrid
                     rows={data}
                     columns={columns}

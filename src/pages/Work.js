@@ -12,12 +12,12 @@ import useBreadcrumbs from 'use-react-router-breadcrumbs';
 import {Breadcrumbs, Box, Typography} from "@material-ui/core";
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import WorkNav from "../components/WorkNav";
-import ReportsDoneList from "../components/ReportsDoneList";
+import ReportsList from "../components/ReportsResult/ReportsList";
 import Schedule from "../components/Schedule";
 import ReportCreate from "../components/ReportCreate";
 import {ContextApp} from "../reducer";
 import {usersList} from "../data"
-import ReportDetail from "../components/ReportDetail";
+import ReportDetail from "../components/ReportsResult/ReportDetail";
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -123,8 +123,8 @@ export default function Work() {
                     {/* eslint-disable-next-line react/jsx-no-undef */}
                     <Redirect to={`${url}/reports`}/>
                 </Route>
-                <Route exact path={`${path}/reports`} component={ReportsDoneList} icon={'Длиннннннннное reports'}/>
-                <Route path={`${path}/reports/:report`} component={ReportDetail} icon={'Длинннннннннное report'}/>
+                <Route exact path={`${path}/reports`} component={ReportsList}/>
+                <Route path={`${path}/reports/:report`} component={ReportDetail}/>
                 <Route exact path={`${path}/schedule`} component={Schedule}/>
                 <Route exact path={`${path}/report-create`} component={ReportCreate}/>
             </SwitchRoute>

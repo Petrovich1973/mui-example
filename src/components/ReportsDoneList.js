@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, useRouteMatch, useHistory} from "react-router-dom";
+import Moment from 'moment';
 import {ContextApp} from "../reducer.js";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -15,8 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import Moment from 'moment';
-import {CircularProgress} from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 
 const useRowStyles = makeStyles(theme => ({
@@ -62,11 +62,11 @@ function Row(props) {
 
     return (
         <>
-            <TableRow className={classes.root}>
+            <TableRow className={classes.root} style={{background: row.status === 'waiting' ? 'rgba(0,0,0,.1)' : 'transparent'}}>
                 <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                    {row.status !== 'waiting' && <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>
+                    </IconButton>}
                 </TableCell>
                 <TableCell component="th" scope="row">{row.name}</TableCell>
                 <TableCell>{row.calories}</TableCell>
@@ -107,7 +107,12 @@ function Row(props) {
                                                 >Смотреть</Button>
                                             </TableCell>
                                             <TableCell>
+                                                {/*<ButtonGroup variant="text" aria-label="text button group">
+                                                    <Button color="primary">Смотреть</Button>
+                                                    <Button>Скачать</Button>
+                                                </ButtonGroup>*/}
                                                 <Button
+                                                    size="small"
                                                     variant="contained"
                                                     color="inherit"
                                                     onClick={() => handleDownloadButton(row)}
@@ -142,7 +147,7 @@ export default function ReportsDoneList() {
             status,
             history: [
                 {
-                    date: '2020-01-05',
+                    date: fat,
                     customerId: user.name,
                     protein
                 },

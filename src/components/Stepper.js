@@ -16,6 +16,8 @@ import Link from "@material-ui/core/Link";
 import {reportGroups, reportsList, gosbList, vspList} from "../data"
 import FormControl from "@material-ui/core/FormControl";
 import {FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import Moment from "moment";
+Moment.locale('ru');
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         marginTop: theme.spacing(2),
         marginRight: theme.spacing(3),
-        width: 250,
+        width: 250
     },
     radioLabel: {
         whiteSpace: "nowrap",
@@ -104,7 +106,7 @@ function StyledRadio(props) {
 const defaultDataForm = {
     reportGroups: null,
     reportsList: null,
-    date: "2021-09-10",
+    date: Moment().format('yyyy-MM-DD'),
     method: 'tb',
     execution: 'now',
     gosb: null,
@@ -123,7 +125,7 @@ const optionsListStorage = [
 const optionsListExecution = [
     {value: 'now', label: 'Сейчас'},
     {value: 'night', label: 'Ночной пакет'},
-    {value: 'schedule', label: 'По расписанию'},
+    {value: 'schedule', label: 'Расписание'},
 ]
 
 const optionsListRepeat = [
@@ -195,7 +197,7 @@ export default function VerticalLinearStepper() {
                 return <div style={{marginBottom: 20}}>
                     <div>На третем шаге заполняется форма настроки запроса формирования отчета</div>
                     <div style={{display: "flex"}}>
-                        <FormControl component="fieldset" className={classes.textField}>
+                        <FormControl component="fieldset" className={classes.textField} style={{minWidth: 180}}>
                             <FormLabel className={classes.radioLabel} component="legend">Структурная единица</FormLabel>
                             <RadioGroup value={dataForm.method} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {
@@ -214,7 +216,7 @@ export default function VerticalLinearStepper() {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        {dataForm.method === 'gosb' && <div className={classes.textField} style={{marginTop: '23px'}}>
+                        {dataForm.method === 'gosb' && <div className={classes.textField} style={{marginTop: '23px', width: 270, flexShrink: 0}}>
                             <Autocomplete
                                 openOnFocus
                                 id="gosb"
@@ -246,7 +248,7 @@ export default function VerticalLinearStepper() {
                                                                     variant="outlined"/>}
                             />}
                         </div>}
-                        <FormControl component="fieldset" className={classes.textField}>
+                        <FormControl component="fieldset" className={classes.textField} style={{minWidth: 150}}>
                             <FormLabel className={classes.radioLabel}
                                        component="legend">Условие&nbsp;запуска</FormLabel>
                             <RadioGroup value={dataForm.execution} aria-label="gender" name="customized-radios"
@@ -267,15 +269,16 @@ export default function VerticalLinearStepper() {
                             </RadioGroup>
                         </FormControl>
 
-                        <div className={classes.textField} style={{marginTop: '23px'}}>
+                        <div className={classes.textField} style={{marginTop: '23px', width: 270, flexShrink: 0}}>
                             <TextField
                                 fullWidth
                                 id="date"
                                 variant="outlined"
                                 label={dataForm.execution === 'schedule' ? "Дата первого запуска" : "Дата отчета"}
                                 type="date"
-                                format="dd/MM/yyyy"
+                                // format="dd/MM/yyyy"
                                 defaultValue={dataForm.date}
+                                // defaultValue="2021-09-10"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -287,8 +290,9 @@ export default function VerticalLinearStepper() {
                             <>
                                 <div style={{height: '30px'}}/>
                                 <FormControl component="fieldset">
-                                    <FormLabel className={classes.radioLabel} component="legend">Повтор
-                                        запуска</FormLabel>
+                                    <FormLabel className={classes.radioLabel} component="legend">
+                                        Повтор запуска
+                                    </FormLabel>
                                     <RadioGroup value={dataForm.range} aria-label="gender" name="customized-radios"
                                                 onChange={(event, newValue) => {
                                                     onChangeDataForm({range: newValue});
@@ -303,7 +307,7 @@ export default function VerticalLinearStepper() {
                             </>
                             }
                         </div>
-                        <FormControl component="fieldset" className={classes.textField}>
+                        <FormControl component="fieldset" className={classes.textField} style={{minWidth: 100, marginRight: 0}}>
                             <FormLabel className={classes.radioLabel} component="legend">
                                 Хранение</FormLabel>
                             <RadioGroup value={dataForm.durationStorage} aria-label="gender"

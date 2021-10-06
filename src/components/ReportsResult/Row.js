@@ -56,12 +56,12 @@ export default function Row({row}) {
                 className={classes.root}
                 style={{background: row.status === 'waiting' ? 'rgba(0,0,0,.1)' : 'transparent'}}>
                 <TableCell>
-                    {row.status !== 'waiting' && <IconButton
+                    <IconButton
                         aria-label="expand row"
                         size="small"
                         onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>}
+                    </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">{row.name}</TableCell>
                 <TableCell>{row.calories}</TableCell>
@@ -71,7 +71,8 @@ export default function Row({row}) {
                     {getStatusRow(row.status, classes)}
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow
+                style={{background: row.status === 'waiting' ? 'rgba(0,0,0,.1)' : 'transparent'}}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
@@ -82,6 +83,7 @@ export default function Row({row}) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>
+                                        <TableCell>Время запуска</TableCell>
                                         <TableCell>Автор</TableCell>
                                         <TableCell>Хранение</TableCell>
                                         <TableCell width={100}/>
@@ -92,12 +94,16 @@ export default function Row({row}) {
                                     {row.history.map((historyRow) => (
                                         <TableRow key={historyRow.date}>
                                             <TableCell>
-                                                {historyRow.date}
+                                                {historyRow.dateCreate}
+                                            </TableCell>
+                                            <TableCell>
+                                                {historyRow.dateTimeStart}
                                             </TableCell>
                                             <TableCell>{historyRow.customerId}</TableCell>
                                             <TableCell>{historyRow.protein} д.</TableCell>
                                             <TableCell>
                                                 <Button
+                                                    disabled={row.status === 'waiting'}
                                                     variant="contained"
                                                     color="primary"
                                                     onClick={() => handleDownloadButton(row)}
@@ -105,6 +111,7 @@ export default function Row({row}) {
                                             </TableCell>
                                             <TableCell>
                                                 <Button
+                                                    disabled={row.status === 'waiting'}
                                                     size="small"
                                                     variant="contained"
                                                     color="inherit"

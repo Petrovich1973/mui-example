@@ -18,13 +18,14 @@ export const gosbList = [
     ["8641", "ЦЕНТРАЛЬНОЕ ОСБ 8641"]
 ]
 export const vspList = [
-    ["0001"],
-    ["0002"],
-    ["0003"],
-    ["0004"],
-    ["0005"],
-    ["0006"],
-    ["0007"],
-    ["0008"],
-    ["0009"],
+    {label: "all", value: 'null'},
+    {label: "0001", value: "0001"},
+    {label: "0002", value: "0002"},
+    {label: "0003", value: "0003"},
+    {label: "0004", value: "0004"},
+    {label: "0005", value: "0005"},
+    {label: "0006", value: "0006"},
+    {label: "0007", value: "0007"},
+    {label: "0008", value: "0008"},
+    {label: "0009", value: "0009"},
 ]

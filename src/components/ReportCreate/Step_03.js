@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import React from "react";
 import clsx from "clsx";
 import {makeStyles} from "@material-ui/core/styles";
+import Moment from "moment";
 
 const useStylesRadioGroup = makeStyles((theme) => ({
     root: {
@@ -70,8 +71,10 @@ const optionsListExecution = [
 ]
 
 const optionsListRepeat = [
-    {value: 'daily', label: 'Ежедневный ночной запуск'},
-    {value: 'monthly', label: 'Ежемесячный ночной запуск'},
+    {value: 'disposable', label: 'Без повтора'},
+    {value: 'daily', label: 'Каждую ночь'},
+    {value: 'monthly', label: 'Каждый месяц'},
+    {value: 'year', label: 'Каждый год'},
 ]
 
 const optionsListStorage = [
@@ -132,18 +135,25 @@ export default function Step_03({classes, dataForm, onChangeDataForm, optionsLis
                     {dataForm.gosb && <Autocomplete
                         id="vsp"
                         size={"medium"}
-                        options={vspList.map(([label]) => (`${label}`))}
-                        getOptionLabel={(option) => option}
+                        options={vspList}
+                        getOptionLabel={(option) => (option.label)}
+                        renderOption={(option) => option.label}
                         className={classes.textField}
                         style={{width: 250, marginTop: '23px'}}
-                        value={dataForm.vsp}
-                        onChange={(event, newValue) => {
-                            onChangeDataForm({vsp: newValue});
+                        value={vspList.find(el => el.value === dataForm.vsp)}
+                        // inputValue={dataForm.vsp}
+                        // onChange={(event, newValue) => {
+                        //     // console.log(newValue.value)
+                        //     onChangeDataForm({vsp: newValue.value});
+                        // }}
+                        onInputChange={(event, newInputValue) => {
+                            onChangeDataForm({vsp: newInputValue.value});
                         }}
                         renderInput={(params) => (
                             <TextField
                                 autoFocus
-                                label="ВСП" {...params}
+                                label="ВСП"
+                                {...params}
                                 variant="outlined"/>
                         )}
                     />}
@@ -153,6 +163,11 @@ export default function Step_03({classes, dataForm, onChangeDataForm, optionsLis
                                component="legend">Условие&nbsp;запуска</FormLabel>
                     <RadioGroup value={dataForm.execution} aria-label="gender" name="customized-radios"
                                 onChange={(event, newValue) => {
+                                    if(newValue === 'schedule') {
+                                        onChangeDataForm({date: Moment().add(1, 'day').format('yyyy-MM-DD')});
+                                    } else {
+                                        onChangeDataForm({date: Moment().format('yyyy-MM-DD')});
+                                    }
                                     onChangeDataForm({execution: newValue});
                                 }}>
                         {optionsListExecution.map((option, idx) => (
@@ -171,7 +186,7 @@ export default function Step_03({classes, dataForm, onChangeDataForm, optionsLis
                     </RadioGroup>
                 </FormControl>
 
-                <div className={classes.textField} style={{marginTop: '23px', width: 270, flexShrink: 0}}>
+                <div className={classes.textField} style={{marginTop: '23px', width: 200, flexShrink: 0}}>
                     <TextField
                         fullWidth
                         id="date"
@@ -179,7 +194,7 @@ export default function Step_03({classes, dataForm, onChangeDataForm, optionsLis
                         label={dataForm.execution === 'schedule' ? "Дата первого запуска" : "Дата отчета"}
                         type="date"
                         // format="dd/MM/yyyy"
-                        defaultValue={dataForm.date}
+                        value={dataForm.date}
                         // defaultValue="2021-09-10"
                         InputLabelProps={{
                             shrink: true,
@@ -190,10 +205,12 @@ export default function Step_03({classes, dataForm, onChangeDataForm, optionsLis
                     />
                     {dataForm.execution === 'schedule' &&
                     <>
+                        <div style={{height: '10px'}}/>
+                        <em>* Отчет за предыдущий день</em>
                         <div style={{height: '30px'}}/>
                         <FormControl component="fieldset">
                             <FormLabel className={classes.radioLabel} component="legend">
-                                Повтор запуска
+                                Повтор запуска (ночной)
                             </FormLabel>
                             <RadioGroup value={dataForm.range} aria-label="gender" name="customized-radios"
                                         onChange={(event, newValue) => {

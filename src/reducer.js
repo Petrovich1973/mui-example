@@ -1,4 +1,6 @@
 import React from "react";
+import Moment from "moment";
+Moment.locale('ru');
 export const ContextApp = React.createContext();
 
 export const initialState = {
@@ -7,6 +9,8 @@ export const initialState = {
             reportGroups: "Формы годовой отчетности по 862-10",
             reportsList: "ВКЛ-1 Ведомость счетов, на которые наложен арест",
             date: "2021-09-11",
+            dateCreate: "12.09.2021",
+            dateTimeStart: "12.09.2021 03:00",
             method: 'tb',
             execution: 'now',
             gosb: null,
@@ -17,7 +21,9 @@ export const initialState = {
         {
             reportGroups: "Отчеты для экономистов",
             reportsList: "ВКЛ-2 Ведомость условно закрытых счетов",
-            date: "2021-09-12",
+            date: "2021-09-07",
+            dateCreate: Moment().format('DD.MM.YYYY'),
+            dateTimeStart: Moment().format('DD.MM.YYYY HH:mm'),
             method: 'tb',
             execution: 'now',
             gosb: null,

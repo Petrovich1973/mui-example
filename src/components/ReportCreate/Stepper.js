@@ -49,16 +49,45 @@ const defaultDataForm = {
     reportGroups: null,
     reportsList: null,
     date: Moment().format('yyyy-MM-DD'),
+    dateCreate: Moment().format('yyyy-MM-DD'),
+    dateTimeStart: null,
     method: 'tb',
     execution: 'now',
     gosb: null,
     vsp: null,
-    range: 'daily',
+    range: 'disposable',
     durationStorage: '1',
     status: 'waiting'
 }
 
-export default function Stepps() {
+const reportGenerationRequest = {
+
+    // Группа отчета
+    reportGroup: 1,
+    // Шаблон отчета
+    reportTpl: 2,
+    // Дата и время создания заявки на формирование отчета
+    reportRequestDateTimeFormation: '',
+    // Дата заказываемого отчета
+    reportRequestDateTime: '',
+    // Планируемые дата и время запуска формирования отчета
+    reportRequestDateTimeLaunch: '',
+    // Дата и время окончания формирования отчета (отчет готов к использованию)
+    reportRequestDateTimeCompleteFormation: '',
+    // ТБ/ОСБ/ВСП
+    actualOffice: '',
+    // Условие запуска
+    startCondition: '',
+    // Запланированные дата и время удаления сформированного отчета
+    scheduledDeletion: '',
+    // Расписание
+    schedule: '',
+    // Статус формирования отчета
+    reportRequestStatus: ''
+
+}
+
+export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
     let {user} = useParams();
     const {tb = ''} = state.user
@@ -108,7 +137,14 @@ export default function Stepps() {
         dispatch({
             type: 'updateState',
             payload: {
-                reportsDoneList: [...state.reportsDoneList, {id: Date.now(), ...dataForm}]
+                reportsDoneList: [
+                    ...state.reportsDoneList,
+                    {
+                        id: Date.now(),
+                        ...dataForm,
+                        dateCreate: Moment().format('DD.MM.YYYY')
+                    }
+                ]
             }
         })
     };

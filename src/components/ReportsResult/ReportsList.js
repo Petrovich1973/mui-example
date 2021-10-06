@@ -13,7 +13,7 @@ export default function ReportsList() {
 
     const [rows, setRows] = React.useState([])
 
-    const createData = React.useCallback((id, name, calories, fat, carbs, protein, status) => {
+    const createData = React.useCallback((id, name, calories, fat, carbs, protein, status, dateCreate, dateTimeStart) => {
         return {
             id,
             name,
@@ -24,6 +24,8 @@ export default function ReportsList() {
             history: [
                 {
                     date: fat,
+                    dateCreate,
+                    dateTimeStart,
                     customerId: user.name,
                     protein
                 },
@@ -38,7 +40,9 @@ export default function ReportsList() {
         Moment(row.date).format('DD.MM.YYYY'),
         `${user && user.tb}ТБ ${row.gosb ? `/ ${row.gosb}` : ''} ${row.gosb && row.vsp ? `/ ${row.vsp}` : ''}`,
         row.durationStorage,
-        row.status)
+        row.status,
+        row.dateCreate,
+        row.dateTimeStart)
     ), [user, reportsDoneList, createData])
 
     // Эмуляция изменения статуса готовности отчета
@@ -47,7 +51,11 @@ export default function ReportsList() {
             dispatch({
                 type: 'updateState',
                 payload: {
-                    reportsDoneList: reportsDoneList.map(el => ({...el, status: 'complete'}))
+                    reportsDoneList: reportsDoneList.map(el => ({
+                        ...el,
+                        status: 'complete',
+                        dateTimeStart: Moment().format('DD.MM.YYYY HH:mm')
+                    }))
                 }
             })
         })

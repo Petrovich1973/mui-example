@@ -1,6 +1,5 @@
 import React from 'react'
-// import '../bootstrap.min.css'
-import {ReCron, CronLocalization} from '@sbzen/re-cron';
+import {ReCron} from '@sbzen/re-cron';
 
 const localization = {
     tabs: {

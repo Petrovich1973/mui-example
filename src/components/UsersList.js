@@ -23,7 +23,10 @@ function createData([name, group, lastName, position, osb, tb]) {
     return {name, group, lastName, position, osb, tb};
 }
 
-const rows = usersList.map(el => createData(el))
+const rows = usersList.map(el => createData(el)).reduce((sum, current) => {
+    if((!sum.some(f => f.group === current.group))) sum.push(current)
+    return sum
+}, [])
 
 export default function UserList() {
     const {dispatch} = React.useContext(ContextApp);
@@ -43,23 +46,17 @@ export default function UserList() {
             <Table className={classes.table} size="medium" aria-label="a dense table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Пользователь</TableCell>
                         <TableCell>Группа</TableCell>
                         <TableCell>Фамилия</TableCell>
                         <TableCell>Должность</TableCell>
-                        <TableCell align="right">ОСБ</TableCell>
-                        <TableCell align="right">ТБ</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row, index) => (
                         <TableRow className={classes.row} key={index} hover onClick={() => onClickRow(row)}>
-                            <TableCell component="td" scope="row">{row.name}</TableCell>
                             <TableCell>{row.group}</TableCell>
                             <TableCell>{row.lastName}</TableCell>
                             <TableCell>{row.position}</TableCell>
-                            <TableCell align="right">{row.osb}</TableCell>
-                            <TableCell align="right">{row.tb}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

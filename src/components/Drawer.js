@@ -49,7 +49,7 @@ export default function TemporaryDrawer() {
             <List>
                 {[
                     {label: "Dashboard", link: "/home"},
-                    {label: "Пользователи", link: "/users"}
+                    {label: "Группы доступа", link: "/groups"}
                 ].map((text, index) => (
 
                     <NavLink

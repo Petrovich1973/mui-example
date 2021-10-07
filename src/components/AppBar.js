@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1
+    },
+    userBox: {
+        display: "flex",
+        alignItems: "center"
     }
 }))
 
@@ -42,10 +46,14 @@ export default function MenuAppBar() {
 
                     <TemporaryDrawer/>
                     <Typography variant="h5" className={classes.title}>
-                        Витрины отчетности по вкладам и счетам ФЛ в РМ ОЦ
+                        Отчеты по вкладам и счетам ФЛ в РМ ОЦ
                     </Typography>
+
                     {auth && (
-                        <div>
+                        <div className={classes.userBox}>
+                            <Typography component="span">
+                                Выгодин В.В
+                            </Typography>
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"

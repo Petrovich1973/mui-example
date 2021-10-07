@@ -16,7 +16,7 @@ import ReportsList from "../components/ReportsResult/ReportsList";
 import Schedule from "../components/Schedule";
 import ReportCreate from "../components/ReportCreate";
 import {ContextApp} from "../reducer";
-import {usersList} from "../data"
+import {groupList} from "../data"
 import ReportDetail from "../components/ReportsResult/ReportDetail";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,17 +39,17 @@ function createData([name, group, lastName, position, osb, tb]) {
     return {name, group, lastName, position, osb, tb};
 }
 
-const BreadcrumbsUsers = () => (
+const BreadcrumbsGroups = () => (
     <React.Fragment>
         <PeopleOutlineIcon fontSize="medium" className={useStyles().icon}/>
     </React.Fragment>
 )
-const BreadcrumbsUser = ({match}) => {
+const BreadcrumbsGroup = ({match}) => {
     return (
         <React.Fragment>
-            <Typography variant="caption" display="block">роль</Typography>
+            <Typography variant="caption" display="block">группа</Typography>
             <div style={{width: 4}}/>
-            <Box fontWeight='fontWeightBold' display='block'>{match.params.user}</Box>
+            <Box fontWeight='fontWeightBold' display='block'>{match.params.group}</Box>
         </React.Fragment>
     )
 }
@@ -66,15 +66,15 @@ const BreadcrumbsReport = ({match}) => {
 
 const routeConfig = [
     {
-        path: "/users",
-        breadcrumb: BreadcrumbsUsers,
+        path: "/groups",
+        breadcrumb: BreadcrumbsGroups,
     },
     {
-        path: "/users/:user",
-        breadcrumb: BreadcrumbsUser,
+        path: "/groups/:group",
+        breadcrumb: BreadcrumbsGroup,
     },
     {
-        path: "/users/:user/reports/:report",
+        path: "/groups/:group/reports/:report",
         breadcrumb: BreadcrumbsReport,
     }
 ];
@@ -84,16 +84,16 @@ export default function Work() {
     let {user} = useParams();
     let {path, url} = useRouteMatch();
     const breadcrumbs = useBreadcrumbs(routeConfig, {
-        excludePaths: ['/', '/users/:user/reports']
+        excludePaths: ['/', '/groups/:group/reports']
     });
 
     const classes = useStyles();
 
     // Нахожу пользователя в списке пользователей по параметру роутера и сохраняю его в reducer
     const setUsers = React.useCallback(() => {
-        const res = usersList.map(el => createData(el)).find(el => el.name === user)
+        const res = groupList.map(el => createData(el)).find(el => el.name === user)
         dispatch({
-            type: 'updateUser',
+            type: 'updateAccessGroup',
             payload: res
         })
     }, [dispatch, user])

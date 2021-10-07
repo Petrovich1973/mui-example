@@ -33,23 +33,20 @@ export const initialState = {
         }
     ],
     user: {},
-    br: {
-        brUser: null,
-        brReport: null
-    }
+    accessGroup: {}
 };
 
-export const testReducer = (state, action) => {
+export const reducerApp = (state, action) => {
     switch(action.type) {
         case 'updateState':
             return {
                 ...state,
                 ...action.payload
             };
-        case 'updateUser':
+        case 'updateAccessGroup':
             return {
                 ...state,
-                user: {...action.payload}
+                accessGroup: {...action.payload}
             };
         default:
             return state

@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import { useHistory } from "react-router-dom"
-import {usersList} from "../data"
+import {groupList} from "../data"
 
 const useStyles = makeStyles({
     table: {
@@ -23,22 +23,22 @@ function createData([name, group, lastName, position, osb, tb]) {
     return {name, group, lastName, position, osb, tb};
 }
 
-const rows = usersList.map(el => createData(el)).reduce((sum, current) => {
+const rows = groupList.map(el => createData(el)).reduce((sum, current) => {
     if((!sum.some(f => f.group === current.group))) sum.push(current)
     return sum
 }, [])
 
-export default function UserList() {
+export default function GroupList() {
     const {dispatch} = React.useContext(ContextApp);
     const classes = useStyles();
     let history = useHistory();
 
     const onClickRow = row => {
         dispatch({
-            type: 'updateUser',
+            type: 'updateAccessGroup',
             payload: row
         })
-        history.push(`/users/${row.name}`);
+        history.push(`/groups/${row.group}`);
     }
 
     return (

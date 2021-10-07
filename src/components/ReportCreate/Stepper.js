@@ -203,7 +203,7 @@ export default function Wizard() {
                         обработку</strong></Typography>
                     <Typography>
                         Данный отчет помещен в список доступных отчетов.
-                        <Link component={NavLink} to={`/users/${user}/reports`}>Смотреть</Link>
+                        <Link component={NavLink} to={`/groups/${user}/reports`}>Смотреть</Link>
                     </Typography>
                     <Button onClick={handleReset} className={classes.button}>
                         Создать новый отчет

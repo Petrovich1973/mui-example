@@ -5,7 +5,7 @@ import {
     Route,
     Redirect
 } from "react-router-dom";
-import {ContextApp, initialState, testReducer} from "./reducer.js";
+import {ContextApp, initialState, reducerApp} from "./reducer.js";
 import themeDefault from './themes/theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
@@ -13,11 +13,11 @@ import AppBar from './components/AppBar'
 import {ThemeProvider} from "@material-ui/core/styles"
 import CustomComponent from "./components/CustomComponent";
 import Home from "./pages/Home"
-import Users from "./pages/Users";
+import AccessGroups from "./pages/AccessGroups";
 import Work from "./pages/Work";
 
 export default function App() {
-    const [state, dispatch] = React.useReducer(testReducer, initialState);
+    const [state, dispatch] = React.useReducer(reducerApp, initialState);
 
     return (
         <ContextApp.Provider value={{state, dispatch}}>
@@ -32,14 +32,13 @@ export default function App() {
                                 {/* eslint-disable-next-line react/jsx-no-undef */}
                                 <Redirect to="/home"/>
                             </Route>
-                            <Route exact path="/users">
-                                <Users/>
+                            <Route exact path="/groups">
+                                <AccessGroups/>
                             </Route>
-                            <Route path="/users/:user">
+                            <Route path="/groups/:group">
                                 <Work/>
                             </Route>
                             <Route path="/reports">
-
                             </Route>
                             <Route path="/home">
                                 <Home/>

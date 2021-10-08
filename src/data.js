@@ -29,3 +29,17 @@ export const vspList = [
     {label: "0008", value: "0008"},
     {label: "0009", value: "0009"},
 ]
+
+export const tbList = [
+    {value: 16, label: "Уральский"},
+    {value: 54, label: "Поволжский"},
+    {value: 42, label: "Волго-Вятский"},
+    {value: 52, label: "Юго-Западный"},
+    {value: 13, label: "Центрально-Черноземный"},
+    {value: 52, label: "Северо-Западный"},
+    {value: 40, label: "Среднерусский"},
+    {value: 38, label: "Московский"},
+    {value: 70, label: "Дальневосточный"},
+    {value: 18, label: "Байкальский"},
+    {value: 44, label: "Сибирский"},
+]

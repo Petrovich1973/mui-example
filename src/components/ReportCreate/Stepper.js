@@ -96,7 +96,6 @@ export default function Wizard() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const steps = getSteps();
-    console.log(state.accessGroup)
     const optionsListMethod = [
         {value: 'tb', label: `${tb} ТБ`},
         {value: 'gosb', label: 'ГОСБ'},

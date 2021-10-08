@@ -10,7 +10,6 @@ export default function ReportsList() {
     const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const {reportsDoneList = [], accessGroup} = state;
-console.log('ReportsList= ', accessGroup)
     const [rows, setRows] = React.useState([])
 
     const createData = React.useCallback((id, name, calories, fat, carbs, protein, status, dateCreate, dateTimeStart) => {

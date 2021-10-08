@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => {
-    console.log(theme)
     return ({
         root: {
             flexGrow: 1,

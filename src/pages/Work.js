@@ -76,6 +76,10 @@ const routeConfig = [
     {
         path: "/groups/:group/reports/:report",
         breadcrumb: BreadcrumbsReport,
+    },
+    {
+        path: "/groups/:group/report-create",
+        breadcrumb: 'Создание отчета',
     }
 ];
 

@@ -53,6 +53,7 @@ const defaultDataForm = {
     dateTimeStart: null,
     method: 'tb',
     execution: 'now',
+    tb: null,
     gosb: null,
     vsp: null,
     range: 'disposable',
@@ -89,13 +90,13 @@ const defaultDataForm = {
 
 export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
-    let {user} = useParams();
-    const {tb = ''} = state.user
+    let {group} = useParams();
+    const {tb = ''} = state.accessGroup
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const steps = getSteps();
-
+    console.log(state.accessGroup)
     const optionsListMethod = [
         {value: 'tb', label: `${tb} ТБ`},
         {value: 'gosb', label: 'ГОСБ'},
@@ -203,7 +204,7 @@ export default function Wizard() {
                         обработку</strong></Typography>
                     <Typography>
                         Данный отчет помещен в список доступных отчетов.
-                        <Link component={NavLink} to={`/groups/${user}/reports`}>Смотреть</Link>
+                        <Link component={NavLink} to={`/groups/${group}/reports`}>Смотреть</Link>
                     </Typography>
                     <Button onClick={handleReset} className={classes.button}>
                         Создать новый отчет

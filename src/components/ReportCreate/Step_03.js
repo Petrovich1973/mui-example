@@ -66,7 +66,7 @@ function StyledRadio(props) {
 
 const optionsListExecution = [
     {value: 'now', label: 'Сейчас'},
-    {value: 'night', label: 'Ночной пакет'},
+    {value: 'night', label: 'Завтра утром'},
     {value: 'schedule', label: 'Расписание'},
 ]
 

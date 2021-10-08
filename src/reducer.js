@@ -32,7 +32,7 @@ export const initialState = {
             status: 'waiting'
         }
     ],
-    user: {},
+    // user: {},
     accessGroup: {}
 };
 

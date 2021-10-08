@@ -81,7 +81,7 @@ const routeConfig = [
 
 export default function Work() {
     const {dispatch} = React.useContext(ContextApp);
-    let {user} = useParams();
+    let {group} = useParams();
     let {path, url} = useRouteMatch();
     const breadcrumbs = useBreadcrumbs(routeConfig, {
         excludePaths: ['/', '/groups/:group/reports']
@@ -91,12 +91,12 @@ export default function Work() {
 
     // Нахожу пользователя в списке пользователей по параметру роутера и сохраняю его в reducer
     const setUsers = React.useCallback(() => {
-        const res = groupList.map(el => createData(el)).find(el => el.name === user)
+        const res = groupList.map(el => createData(el)).find(el => el.group === group)
         dispatch({
             type: 'updateAccessGroup',
             payload: res
         })
-    }, [dispatch, user])
+    }, [dispatch, group])
 
     React.useEffect(() => {
         setUsers()

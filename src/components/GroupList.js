@@ -34,6 +34,7 @@ export default function GroupList() {
     let history = useHistory();
 
     const onClickRow = row => {
+        console.log(row)
         dispatch({
             type: 'updateAccessGroup',
             payload: row

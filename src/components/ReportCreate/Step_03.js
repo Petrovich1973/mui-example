@@ -83,7 +83,12 @@ const optionsListStorage = [
     {value: '5', label: '5 дней'},
 ]
 
-export default function Step_03({classes, dataForm, onChangeDataForm, optionsListMethod}) {
+const optionsListMethod = [
+    {value: 'tb', label: `ТБ`},
+    {value: 'gosb', label: 'ГОСБ'},
+]
+
+export default function Step_03({classes, dataForm, onChangeDataForm}) {
     return (
         <div style={{marginBottom: 20}}>
             <div>На третем шаге заполняется форма настроки запроса формирования отчета</div>

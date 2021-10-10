@@ -91,15 +91,10 @@ const defaultDataForm = {
 export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
     let {group} = useParams();
-    const {tb = ''} = state.accessGroup
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const steps = getSteps();
-    const optionsListMethod = [
-        {value: 'tb', label: `${tb} ТБ`},
-        {value: 'gosb', label: 'ГОСБ'},
-    ]
 
     function getSteps() {
         return [
@@ -125,7 +120,7 @@ export default function Wizard() {
                 );
             case 2:
                 return (
-                    <Step03 {...{classes, dataForm, onChangeDataForm, optionsListMethod}}/>
+                    <Step03 {...{classes, dataForm, onChangeDataForm}}/>
                 );
             default:
                 return 'Unknown step';

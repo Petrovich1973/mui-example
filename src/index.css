@@ -1,3 +1,9 @@
 #sberLogo path {
   fill: rgba(255, 255, 255, .7);
 }
+.table th {
+  width: 1px;
+}
+.table th, .table td {
+  padding: .4rem 1rem;
+}

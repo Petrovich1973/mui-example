@@ -3,6 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Cron from "../components/Cron";
 import reports from '../reports.json'
+import Dashboard from "../components/Dashboard";
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -32,18 +33,18 @@ export default function Home() {
 
     const rows = reports.root.row
         .filter(f => (f.NAME_PROC !== "no proc"))
-        .reduce((sum, current) => {
-            if (current.GROUP_NAME) sum.push({...current, children: []})
-            else sum[sum.length - 1].children.push(current)
-            return sum
-        }, [])
-        .map(m => {
-            m.children.map(mm => {
-                if(m.GROUP_NAME === 'dep_web_reports' && mm.MENU_NUMBER.split('.').length > 3) console.log(mm.TITLE, m.children.length)
-                return mm
-            })
-            return m
-        })
+        // .reduce((sum, current) => {
+        //     if (current.GROUP_NAME) sum.push({...current, children: []})
+        //     else sum[sum.length - 1].children.push(current)
+        //     return sum
+        // }, [])
+        // .map(m => {
+        //     m.children.map(mm => {
+        //         if(m.GROUP_NAME === 'dep_web_reports' && mm.MENU_NUMBER.split('.').length > 3) console.log(mm.TITLE, m.children.length)
+        //         return mm
+        //     })
+        //     return m
+        // })
         .filter(f => (f.GROUP_NAME === 'dep_web_reports'))
 
 // ОТЧЕТЫ ПОЛЬЗОВАТЕЛЯ по данным интегратора экономических форм
@@ -51,8 +52,8 @@ export default function Home() {
 // ФОРМА 68
     return (
         <div>
-
-            <table className={'table'}>
+            <Dashboard/>
+            {/*<table className={'table'}>
                 <thead>
                 <tr>
                     <th colSpan={2}/>
@@ -121,7 +122,7 @@ export default function Home() {
                     )
                 })}
                 </tbody>
-            </table>
+            </table>*/}
             {/*<ol>
                 {rows.map((row, idx) => {
                     if(idx === 5) console.log(row)

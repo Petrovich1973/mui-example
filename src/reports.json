@@ -1707,7 +1707,7 @@
                 "MENU_NUMBER": "3.1",
                 "TITLE": "ВКЛ-1 Ведомость счетов, на которые наложен арест",
                 "NAME_PROC": "krp_1.vkl01",
-                "NAME_REPORT": "ВКЛ-1  Счета на которые наложен арест"
+                "NAME_REPORT": "ВКЛ-1 Счета на которые наложен арест"
             },
             {
                 "GROUP_NAME": "",
@@ -7485,7 +7485,7 @@
                 "NAME_REPORT": "Выгрузка по смене Владельцев номинальных счетов"
             },
             {
-                "GROUP_NAME": "",
+                "GROUP_NAME": "undefined_group",
                 "MENU_NUMBER": "1",
                 "TITLE": "Отчеты по арестам. Какие-то старые отчеты 28.02.2018",
                 "NAME_PROC": "",
@@ -7576,7 +7576,7 @@
                 "NAME_REPORT": "Формирование отчета по РЭДО"
             },
             {
-                "GROUP_NAME": "",
+                "GROUP_NAME": "undefined_group",
                 "MENU_NUMBER": "2",
                 "TITLE": "Финансовый мониторинг",
                 "NAME_PROC": "FINMONITOR.REP1",

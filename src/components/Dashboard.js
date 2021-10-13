@@ -5,12 +5,12 @@ const rows = reports.root.row
     .filter(f => (f.NAME_PROC !== "no proc"))
     .filter(f => (f.NAME_REPORT !== "Тестовый отчет для отладки"))
     .filter(f => (f.TITLE !== "меню 1"))
-    // .filter(f => (f.GROUP_NAME === 'dep_web_reports'))
-    // .map((m, id) => ({...m, id}))
-    // .reduce((sum, current) => {
-    //     if(current.GROUP_NAME) return {parent: current.id, list: [...sum.list, current]}
-    //     return {...sum, list: [...sum.list, {...current, group: sum.parent}]}
-    // }, {parent: null, list: []}).list
+// .filter(f => (f.GROUP_NAME === 'dep_web_reports'))
+// .map((m, id) => ({...m, id}))
+// .reduce((sum, current) => {
+//     if(current.GROUP_NAME) return {parent: current.id, list: [...sum.list, current]}
+//     return {...sum, list: [...sum.list, {...current, group: sum.parent}]}
+// }, {parent: null, list: []}).list
 
 const totalReports = rows.filter(f => f.NAME_REPORT).length
 
@@ -36,24 +36,26 @@ export default function Dashboard() {
         <>
             <h3>Total(reports): {totalReports}</h3>
             <input value={inputFilter} onChange={handleKeyUp}/>
-            <table>
-            <tbody>
-            {rows.filter(filter).map((row, i) => {
-                return (
-                    <tr key={i}>
-                        {row.GROUP_NAME ?
-                            <td colSpan={4} style={{color: row.GROUP_NAME === "undefined_group" ? 'red' : 'inherit'}}><strong>{row.TITLE}</strong></td> :
-                            row.MENU_NUMBER.split('.').length === 2 ?
-                                <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td colSpan={3}>{row.NAME_REPORT ? row.NAME_REPORT : <strong>{row.TITLE}</strong>}</td></> :
-                                row.MENU_NUMBER.split('.').length === 3 ?
-                                    <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td colSpan={2}>{row.NAME_REPORT ? row.NAME_REPORT : <strong>{row.TITLE}</strong>}</td></> :
-                                    <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td>{row.NAME_REPORT ? row.NAME_REPORT : <strong>{row.TITLE}</strong>}</td></>
-                        }
-                    </tr>
-                )
-            })}
-            </tbody>
-        </table>
+            <table className="table">
+                <tbody>
+                {rows.filter(filter).map((row, i) => {
+                    const isDouble = rows.filter(f => (f.NAME_REPORT === row.NAME_REPORT)).length > 1
+                    const isSearchRow = `${row.GROUP_NAME}---${row.TITLE}---${row.NAME_REPORT}`.includes(inputFilter)
+                    return (
+                        <tr key={i} style={inputFilter && isSearchRow ? {color: 'orange'} : inputFilter ? {opacity: '.3'} : {}}>
+                            {row.GROUP_NAME ?
+                                <td colSpan={4} style={{color: row.GROUP_NAME === "undefined_group" ? 'red' : 'inherit'}}><strong>{row.TITLE} (<small><em>{row.GROUP_NAME}</em></small>)</strong></td> :
+                                row.MENU_NUMBER.split('.').length === 2 ?
+                                    <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td colSpan={3}>{row.NAME_REPORT ? <><span>{row.NAME_REPORT}</span> {isDouble && (<small>{row.TITLE}</small>)}</> : <strong>{row.TITLE}</strong>}</td></> :
+                                    row.MENU_NUMBER.split('.').length === 3 ?
+                                        <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td colSpan={2}>{row.NAME_REPORT ? <><span>{row.NAME_REPORT}</span> {isDouble && (<small>{row.TITLE}</small>)}</> : <strong>{row.TITLE}</strong>}</td></> :
+                                        <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td>{row.NAME_REPORT ? <><span>{row.NAME_REPORT}</span> {isDouble && (<small>{row.TITLE}</small>)}</> : <strong>{row.TITLE}</strong>}</td></>
+                            }
+                        </tr>
+                    )
+                })}
+                </tbody>
+            </table>
             <div style={{height: 100}}/>
         </>
     )

@@ -44,7 +44,7 @@ export default function Dashboard() {
                     return (
                         <tr key={i} style={inputFilter && isSearchRow ? {color: 'orange'} : inputFilter ? {opacity: '.3'} : {}}>
                             {row.GROUP_NAME ?
-                                <td colSpan={4} style={{color: row.GROUP_NAME === "undefined_group" ? 'red' : 'inherit'}}><strong>{row.TITLE} (<small><em>{row.GROUP_NAME}</em></small>)</strong></td> :
+                                <td colSpan={4} style={{color: row.GROUP_NAME === "undefined_group" ? 'red' : 'inherit'}}><strong>{row.TITLE} <small>(<em>{row.GROUP_NAME}</em>)</small></strong></td> :
                                 row.MENU_NUMBER.split('.').length === 2 ?
                                     <><td width={100} style={{borderLeft: '1px solid #ccc'}}/><td colSpan={3}>{row.NAME_REPORT ? <><span>{row.NAME_REPORT}</span> {isDouble && (<small>{row.TITLE}</small>)}</> : <strong>{row.TITLE}</strong>}</td></> :
                                     row.MENU_NUMBER.split('.').length === 3 ?

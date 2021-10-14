@@ -48,7 +48,7 @@ export default function Dashboard() {
                     openOnFocus
                     id="l1"
                     size={"medium"}
-                    options={resultList}
+                    options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 2)}
                     getOptionLabel={(option) => `${option.MENU_NUMBER} - ${option.TITLE}`}
                     getOptionSelected={(option, value) => option.id === value.id}
                     style={{width: 450}}

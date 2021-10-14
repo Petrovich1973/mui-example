@@ -34,9 +34,13 @@ export default function Dashboard() {
         resultList.filter(f => f.MENU_NUMBER.split('.').length === n &&
             prevSelect.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, n-1).join('.'))
     )
-
+    const renderInput = (params) => <TextField autoFocus
+                                         label="" {...params}
+                                         placeholder="Не выбрано"
+                                         variant="outlined"/>
     const optionVisible = option => `${option.MENU_NUMBER} ${option.NAME_REPORT} ${option.TITLE}`
     const optionVisible2 = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
+    const optionVisible3 = (option, value) => option.TITLE === value.TITLE
 
     const totalDepWebReports = resultList.filter(f => f.NAME_REPORT).length
 
@@ -44,7 +48,7 @@ export default function Dashboard() {
         <>
             <div>
                 <div>
-                    Пример выбора отчета в группе <strong>dep_web_reports</strong><small>{totalDepWebReports}</small>
+                    Пример выбора отчета в группе <strong>dep_web_reports:</strong> <big>{totalDepWebReports}</big>
                 </div>
                 <div style={{height: 10}}/>
                 <div>
@@ -67,7 +71,7 @@ export default function Dashboard() {
                     options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 2)}
                     getOptionLabel={optionVisible}
                     renderOption={optionVisible2}
-                    getOptionSelected={(option, value) => option.TITLE === value.TITLE}
+                    getOptionSelected={optionVisible3}
                     style={{width: 450}}
                     value={l1}
                     onChange={(event, newValue) => {
@@ -75,9 +79,7 @@ export default function Dashboard() {
                         setL2(null)
                         setL3(null)
                     }}
-                    renderInput={(params) => <TextField autoFocus
-                                                        label="" {...params}
-                                                        variant="outlined"/>}
+                    renderInput={renderInput}
                 />
             </div>
             {l1 && nesting(l1, 3).length ?
@@ -91,16 +93,14 @@ export default function Dashboard() {
                         options={nesting(l1, 3)}
                         getOptionLabel={optionVisible}
                         renderOption={optionVisible2}
-                        getOptionSelected={(option, value) => option.TITLE === value.TITLE}
+                        getOptionSelected={optionVisible3}
                         style={{width: 450}}
                         value={l2}
                         onChange={(event, newValue) => {
                             setL2(newValue)
                             setL3(null)
                         }}
-                        renderInput={(params) => <TextField autoFocus
-                                                            label="" {...params}
-                                                            variant="outlined"/>}
+                        renderInput={renderInput}
                     />
                 </div> : null}
             {l2 && nesting(l2, 4).length ?
@@ -114,15 +114,13 @@ export default function Dashboard() {
                         options={nesting(l2, 4)}
                         getOptionLabel={optionVisible}
                         renderOption={optionVisible2}
-                        getOptionSelected={(option, value) => option.TITLE === value.TITLE}
+                        getOptionSelected={optionVisible3}
                         style={{width: 450}}
                         value={l3}
                         onChange={(event, newValue) => {
                             setL3(newValue)
                         }}
-                        renderInput={(params) => <TextField autoFocus
-                                                            label="" {...params}
-                                                            variant="outlined"/>}
+                        renderInput={renderInput}
                     />
                 </div> : null}
             <div style={{height: 100}}/>

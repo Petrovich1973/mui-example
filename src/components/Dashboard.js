@@ -15,6 +15,7 @@ export default function Dashboard() {
     const [l2, setL2] = React.useState(null)
     const [l3, setL3] = React.useState(null)
 
+
     const resultList = rows
         .reduce((sum, current) => {
             if (current.GROUP_NAME) sum.push({...current, children: []})
@@ -29,28 +30,44 @@ export default function Dashboard() {
             return sum
         }, [])
 
+    const nesting = (prevSelect, n) => (
+        resultList.filter(f => f.MENU_NUMBER.split('.').length === n &&
+            prevSelect.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, n-1).join('.'))
+    )
+
+    const optionVisible = option => `${option.MENU_NUMBER} ${option.NAME_REPORT} ${option.TITLE}`
+    const optionVisible2 = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
+
     const totalDepWebReports = resultList.filter(f => f.NAME_REPORT).length
 
     return (
         <>
             <div>
-                <div>Пример выбора отчета в группе <strong>dep_web_reports</strong><small>{totalDepWebReports}</small></div>
                 <div>
-                    {l1 && <span><small><em>{l1.MENU_NUMBER}</em></small> <strong>{l1.TITLE}</strong></span>}
-                    {l2 && <span> &#10141; <small><em>{l2.MENU_NUMBER}</em></small> <strong>{l2.TITLE}</strong></span>}
-                    {l3 && <span> &#10141; <small><em>{l3.MENU_NUMBER}</em></small> <strong>{l3.TITLE}</strong></span>}
+                    Пример выбора отчета в группе <strong>dep_web_reports</strong><small>{totalDepWebReports}</small>
+                </div>
+                <div style={{height: 10}}/>
+                <div>
+                    {l1 &&
+                    <span><small><em>{l1.MENU_NUMBER}</em></small> <strong>{l1.NAME_REPORT || l1.TITLE}</strong></span>}
+                    {l2 &&
+                    <span> &#10141; <small><em>{l2.MENU_NUMBER}</em></small> <strong>{l2.NAME_REPORT || l2.TITLE}</strong></span>}
+                    {l3 &&
+                    <span> &#10141; <small><em>{l3.MENU_NUMBER}</em></small> <strong>{l3.NAME_REPORT || l3.TITLE}</strong></span>}
                     &nbsp;
                 </div>
             </div>
-            <div style={{height: 10}} />
+            <div style={{height: 10}}/>
             <div>
                 <Autocomplete
                     openOnFocus
+                    noOptionsText={'Ничего не найдено'}
                     id="l1"
                     size={"medium"}
                     options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 2)}
-                    getOptionLabel={(option) => `${option.MENU_NUMBER} - ${option.TITLE}`}
-                    getOptionSelected={(option, value) => option.id === value.id}
+                    getOptionLabel={optionVisible}
+                    renderOption={optionVisible2}
+                    getOptionSelected={(option, value) => option.TITLE === value.TITLE}
                     style={{width: 450}}
                     value={l1}
                     onChange={(event, newValue) => {
@@ -63,15 +80,18 @@ export default function Dashboard() {
                                                         variant="outlined"/>}
                 />
             </div>
-            {l1 && resultList.filter(f => f.MENU_NUMBER.split('.').length === 3 && l1.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, 2).join('.')).length ?
+            {l1 && nesting(l1, 3).length ?
                 <div>
+                    <div style={{height: 10}}/>
                     <Autocomplete
                         openOnFocus
+                        noOptionsText={'Ничего не найдено'}
                         id="l2"
                         size={"medium"}
-                        options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 3 && l1.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, 2).join('.'))}
-                        getOptionLabel={(option) => `${option.MENU_NUMBER} - ${option.TITLE}`}
-                        getOptionSelected={(option, value) => option.id === value.id}
+                        options={nesting(l1, 3)}
+                        getOptionLabel={optionVisible}
+                        renderOption={optionVisible2}
+                        getOptionSelected={(option, value) => option.TITLE === value.TITLE}
                         style={{width: 450}}
                         value={l2}
                         onChange={(event, newValue) => {
@@ -83,15 +103,18 @@ export default function Dashboard() {
                                                             variant="outlined"/>}
                     />
                 </div> : null}
-            {l2 && resultList.filter(f => f.MENU_NUMBER.split('.').length === 4 && l2.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, 3).join('.')).length ?
+            {l2 && nesting(l2, 4).length ?
                 <div>
+                    <div style={{height: 10}}/>
                     <Autocomplete
                         openOnFocus
+                        noOptionsText={'Ничего не найдено'}
                         id="l3"
                         size={"medium"}
-                        options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 4 && l2.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, 3).join('.'))}
-                        getOptionLabel={(option) => `${option.MENU_NUMBER} - ${option.TITLE}`}
-                        getOptionSelected={(option, value) => option.id === value.id}
+                        options={nesting(l2, 4)}
+                        getOptionLabel={optionVisible}
+                        renderOption={optionVisible2}
+                        getOptionSelected={(option, value) => option.TITLE === value.TITLE}
                         style={{width: 450}}
                         value={l3}
                         onChange={(event, newValue) => {
@@ -102,7 +125,7 @@ export default function Dashboard() {
                                                             variant="outlined"/>}
                     />
                 </div> : null}
-            <div style={{height: 100}} />
+            <div style={{height: 100}}/>
             <h3>Список всех отчетов: {totalReports}</h3>
             <table className="table">
                 <tbody>

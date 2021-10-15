@@ -1,6 +1,7 @@
 import React from 'react';
 import {DataGrid} from '@mui/x-data-grid';
 import axios from "axios";
+import {report} from "../../data"
 
 const columns = [
     {
@@ -50,14 +51,15 @@ export default function ReportDetail() {
 
     React.useEffect(() => {
 
-        const fetchData = async () => {
-            const result = await axios('/report');
-            return result.data
-        };
-
-        fetchData()
-            .then(res => setData(res))
-            .catch(err => console.error(err));
+        // const fetchData = async () => {
+        //     const result = await axios('/report');
+        //     return result.data
+        // };
+        //
+        // fetchData()
+        //     .then(res => setData(res))
+        //     .catch(err => console.error(err));
+        setData(report)
 
     }, []);
 

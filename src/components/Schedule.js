@@ -128,18 +128,19 @@ export default class Demo extends React.PureComponent {
 
         return (
             <Paper elevation={0}>
-                <Scheduler
-                    data={data}
-                >
-                    <ViewState
-                        defaultCurrentDate="2018-07-27"
-                    />
-                    <MonthView />
-                    <Toolbar />
-                    <DateNavigator />
-                    <TodayButton />
-                    <Appointments />
-                </Scheduler>
+                Здесь календарь
+                {/*<Scheduler*/}
+                {/*    data={data}*/}
+                {/*>*/}
+                {/*    <ViewState*/}
+                {/*        defaultCurrentDate="2018-07-27"*/}
+                {/*    />*/}
+                {/*    <MonthView />*/}
+                {/*    <Toolbar />*/}
+                {/*    <DateNavigator />*/}
+                {/*    <TodayButton />*/}
+                {/*    <Appointments />*/}
+                {/*</Scheduler>*/}
             </Paper>
         );
     }

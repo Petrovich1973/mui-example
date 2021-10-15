@@ -30,7 +30,7 @@ export default function App() {
                         <SwitchRoute>
                             <Route exact path="/">
                                 {/* eslint-disable-next-line react/jsx-no-undef */}
-                                <Redirect to="/home"/>
+                                <Redirect to="/groups"/>
                             </Route>
                             <Route exact path="/groups">
                                 <AccessGroups/>

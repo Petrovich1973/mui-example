@@ -5,7 +5,6 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import { useHistory } from "react-router-dom"
 import {groupList} from "../data"
@@ -29,7 +28,8 @@ const rows = groupList.map(el => createData(el)).reduce((sum, current) => {
 }, [])
 
 export default function GroupList() {
-    const {dispatch} = React.useContext(ContextApp);
+    const {state, dispatch} = React.useContext(ContextApp);
+    const {permission} = state.user
     const classes = useStyles();
     let history = useHistory();
 
@@ -41,22 +41,15 @@ export default function GroupList() {
         history.push(`/groups/${row.group}`);
     }
 
+    const isActiveRow = group => permission.some(el => el === group)
+
     return (
         <TableContainer>
             <Table className={classes.table} size="medium" aria-label="a dense table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Группа</TableCell>
-                        <TableCell>Фамилия</TableCell>
-                        <TableCell>Должность</TableCell>
-                    </TableRow>
-                </TableHead>
                 <TableBody>
-                    {rows.map((row, index) => (
+                    {rows.filter(row => isActiveRow(row.group)).map((row, index) => (
                         <TableRow className={classes.row} key={index} hover onClick={() => onClickRow(row)}>
                             <TableCell>{row.group}</TableCell>
-                            <TableCell>{row.lastName}</TableCell>
-                            <TableCell>{row.position}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

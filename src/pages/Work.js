@@ -74,8 +74,16 @@ const routeConfig = [
         breadcrumb: BreadcrumbsGroup,
     },
     {
+        path: "/groups/:group/reports",
+        breadcrumb: 'Доступные отчеты',
+    },
+    {
         path: "/groups/:group/reports/:report",
         breadcrumb: BreadcrumbsReport,
+    },
+    {
+        path: "/groups/:group/schedule",
+        breadcrumb: 'Расписание',
     },
     {
         path: "/groups/:group/report-create",
@@ -88,7 +96,7 @@ export default function Work() {
     let {group} = useParams();
     let {path, url} = useRouteMatch();
     const breadcrumbs = useBreadcrumbs(routeConfig, {
-        excludePaths: ['/', '/groups/:group/reports']
+        excludePaths: ['/']
     });
 
     const classes = useStyles();

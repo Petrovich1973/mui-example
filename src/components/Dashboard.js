@@ -32,15 +32,19 @@ export default function Dashboard() {
 
     const nesting = (prevSelect, n) => (
         resultList.filter(f => f.MENU_NUMBER.split('.').length === n &&
-            prevSelect.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, n-1).join('.'))
+            prevSelect.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, n - 1).join('.'))
     )
-    const renderInput = (params) => <TextField autoFocus
-                                         label="" {...params}
-                                         placeholder="Не выбрано"
-                                         variant="outlined"/>
-    const optionVisible = option => `${option.MENU_NUMBER} ${option.NAME_REPORT} ${option.TITLE}`
-    const optionVisible2 = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
-    const optionVisible3 = (option, value) => option.TITLE === value.TITLE
+    const renderInput = (params) => (
+        <TextField
+            autoFocus
+            label=""
+            {...params}
+            placeholder="Не выбрано"
+            variant="outlined"/>
+    )
+    const getOptionLabel = option => `${option.MENU_NUMBER} ${option.NAME_REPORT} ${option.TITLE}`
+    const renderOption = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
+    const getOptionSelected = (option, value) => option.TITLE === value.TITLE
 
     const totalDepWebReports = resultList.filter(f => f.NAME_REPORT).length
 
@@ -55,9 +59,11 @@ export default function Dashboard() {
                     {l1 &&
                     <span><small><em>{l1.MENU_NUMBER}</em></small> <strong>{l1.NAME_REPORT || l1.TITLE}</strong></span>}
                     {l2 &&
-                    <span> &#10141; <small><em>{l2.MENU_NUMBER}</em></small> <strong>{l2.NAME_REPORT || l2.TITLE}</strong></span>}
+                    <span> &#10141;
+                        <small><em>{l2.MENU_NUMBER}</em></small> <strong>{l2.NAME_REPORT || l2.TITLE}</strong></span>}
                     {l3 &&
-                    <span> &#10141; <small><em>{l3.MENU_NUMBER}</em></small> <strong>{l3.NAME_REPORT || l3.TITLE}</strong></span>}
+                    <span> &#10141;
+                        <small><em>{l3.MENU_NUMBER}</em></small> <strong>{l3.NAME_REPORT || l3.TITLE}</strong></span>}
                     &nbsp;
                 </div>
             </div>
@@ -69,9 +75,9 @@ export default function Dashboard() {
                     id="l1"
                     size={"medium"}
                     options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 2)}
-                    getOptionLabel={optionVisible}
-                    renderOption={optionVisible2}
-                    getOptionSelected={optionVisible3}
+                    getOptionLabel={getOptionLabel}
+                    renderOption={renderOption}
+                    getOptionSelected={getOptionSelected}
                     style={{width: 450}}
                     value={l1}
                     onChange={(event, newValue) => {
@@ -91,9 +97,9 @@ export default function Dashboard() {
                         id="l2"
                         size={"medium"}
                         options={nesting(l1, 3)}
-                        getOptionLabel={optionVisible}
-                        renderOption={optionVisible2}
-                        getOptionSelected={optionVisible3}
+                        getOptionLabel={getOptionLabel}
+                        renderOption={renderOption}
+                        getOptionSelected={getOptionSelected}
                         style={{width: 450}}
                         value={l2}
                         onChange={(event, newValue) => {
@@ -112,9 +118,9 @@ export default function Dashboard() {
                         id="l3"
                         size={"medium"}
                         options={nesting(l2, 4)}
-                        getOptionLabel={optionVisible}
-                        renderOption={optionVisible2}
-                        getOptionSelected={optionVisible3}
+                        getOptionLabel={getOptionLabel}
+                        renderOption={renderOption}
+                        getOptionSelected={getOptionSelected}
                         style={{width: 450}}
                         value={l3}
                         onChange={(event, newValue) => {

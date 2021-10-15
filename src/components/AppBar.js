@@ -8,6 +8,7 @@ import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import TemporaryDrawer from "./Drawer"
+import {ContextApp} from "../reducer";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MenuAppBar() {
     const classes = useStyles()
-    const [auth] = React.useState(true)
+    const {state} = React.useContext(ContextApp);
+    const {auth, user} = state
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
 
@@ -52,7 +54,8 @@ export default function MenuAppBar() {
                     {auth && (
                         <div className={classes.userBox}>
                             <Typography component="span">
-                                Выгодин В.В
+                                <span style={{height: 5, display: 'block'}} />
+                                <small><em>{user.position}</em></small> {user.name}
                             </Typography>
                             <IconButton
                                 aria-label="account of current user"

@@ -146,11 +146,6 @@ export default function Step_03({classes, dataForm, onChangeDataForm}) {
                         className={classes.textField}
                         style={{width: 250, marginTop: '23px'}}
                         value={vspList.find(el => el.value === dataForm.vsp)}
-                        // inputValue={dataForm.vsp}
-                        // onChange={(event, newValue) => {
-                        //     // console.log(newValue.value)
-                        //     onChangeDataForm({vsp: newValue.value});
-                        // }}
                         onInputChange={(event, newInputValue) => {
                             onChangeDataForm({vsp: newInputValue.value});
                         }}

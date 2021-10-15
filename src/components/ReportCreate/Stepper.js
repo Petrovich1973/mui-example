@@ -90,6 +90,7 @@ const defaultDataForm = {
 
 export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
+    const {name, login} = state.user
     let {group} = useParams();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -129,6 +130,10 @@ export default function Wizard() {
 
     const handleStart = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        const author = {
+            name,
+            login
+        }
         dispatch({
             type: 'updateState',
             payload: {
@@ -137,6 +142,7 @@ export default function Wizard() {
                     {
                         id: Date.now(),
                         ...dataForm,
+                        author,
                         dateCreate: Moment().format('DD.MM.YYYY')
                     }
                 ]

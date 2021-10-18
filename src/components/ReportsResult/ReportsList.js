@@ -11,12 +11,10 @@ import {
     TableRow,
     Typography,
     Switch,
-    Box,
-    Button
+    Box
 } from '@material-ui/core';
 import {styled, makeStyles} from '@material-ui/core/styles'
-import delay from "../../utils/delay";
-import Row from "./Row";
+// import delay from "../../utils/delay";
 import Row2 from "./Row2";
 
 const useRowStyles = makeStyles(theme => ({
@@ -83,70 +81,30 @@ export default function ReportsList() {
     const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const classes = useRowStyles();
-    const {reportsDoneList = [], accessGroup, user, reportRequest} = state;
-    const [rows, setRows] = React.useState([])
+    const {user, reportRequest} = state;
     const [rows2, setRows2] = React.useState([])
 
-    const filter = ({author: {login}}) => {
-        if (!user.settings.viewAll) return user.login === login
-        return true
-    }
+    const exampleList = React.useCallback(() => ([
+        {...reportRequest, reportRequestStatus: 'complete'},
+        {
+            ...reportRequest,
+            reportTpl: {
+                path: 'ОТЧЕТЫ ПОЛЬЗОВАТЕЛЯ по данным интегратора экономических форм/Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ',
+                name: 'Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ'
+            },
+            author: {
+                name: 'Билецкая С.С.',
+                login: 'SSBiletskaya'
+            }
+        }
+    ]), [reportRequest])
+
     const filter2 = ({login}) => {
         if (!user.settings.viewAll) return user.login === login
         return true
     }
-    const listReports = rows.filter(filter)
+
     const listReports2 = rows2.filter(filter2)
-
-    const createData = React.useCallback((id, name, calories, fat, carbs, protein, status, dateCreate, dateTimeStart, author) => {
-        return {
-            id,
-            name,
-            calories,
-            fat,
-            carbs,
-            status,
-            history: [
-                {
-                    date: fat,
-                    dateCreate,
-                    dateTimeStart,
-                    customerId: author.name,
-                    protein
-                },
-            ],
-            author
-        };
-    }, [])
-
-    const createRows = React.useCallback(() => reportsDoneList.map(row => createData(
-        row.id,
-        row.reportGroups,
-        row.reportsList,
-        Moment(row.date).format('DD.MM.YYYY'),
-        `${accessGroup && accessGroup.tb}ТБ ${row.gosb ? `/ ${row.gosb}` : ''} ${row.gosb && row.vsp ? `/ ${row.vsp}` : ''}`,
-        row.durationStorage,
-        row.status,
-        row.dateCreate,
-        row.dateTimeStart,
-        row.author)
-    ), [accessGroup, reportsDoneList, createData])
-
-    // Эмуляция изменения статуса готовности отчета
-    const validateStatus = React.useCallback(() => {
-        if (reportsDoneList.some(el => el.status === 'waiting')) delay(7000).then(() => {
-            dispatch({
-                type: 'updateState',
-                payload: {
-                    reportsDoneList: reportsDoneList.map(el => ({
-                        ...el,
-                        status: 'complete',
-                        dateTimeStart: Moment().format('DD.MM.YYYY HH:mm')
-                    }))
-                }
-            })
-        })
-    }, [dispatch, reportsDoneList])
 
     const handleChangeSwitch = value => {
         dispatch({
@@ -157,15 +115,7 @@ export default function ReportsList() {
         })
     }
 
-    React.useEffect(() => {
-        setRows(createRows().reverse())
-        validateStatus()
-    }, [createRows, validateStatus])
-
-    const createRows2 = React.useCallback(() => [{...reportRequest}, {...reportRequest, author: {
-            name: 'Билецкая С.С.',
-            login: 'SSBiletskaya'
-        }}].map(row => {
+    const createRows2 = React.useCallback((list) => list.map(row => {
         return (
             {
                 id: 111,
@@ -187,18 +137,31 @@ export default function ReportsList() {
         )
     }), [])
 
-    React.useEffect(() => {
-        setRows2(createRows2().reverse())
-    }, [createRows2])
+    // Эмуляция изменения статуса готовности отчета
+    // const validateStatus2 = React.useCallback(() => {
+    //
+    //     if (exampleList().some(el => el.reportRequestStatus === 'witting')) delay(7000).then(() => {
+    //         setRows2(createRows2(exampleList().map(el => ({
+    //             ...el,
+    //             reportRequestStatus: 'complete'
+    //         }))).reverse())
+    //     })
+    //
+    // }, [exampleList, createRows2])
 
-    if (!rows.length) return (
+    React.useEffect(() => {
+        setRows2(createRows2(exampleList()).reverse())
+        // validateStatus2()
+    }, [createRows2, exampleList, /*validateStatus2*/])
+
+    if (!rows2.length) return (
         <div>
             <Typography variant={'h6'}>Пока нет доступных отчетов.</Typography>
             <Typography><Link to={`./report-create`}>Создать отчет</Link></Typography>
         </div>
     )
 
-    if (!listReports.length) return (
+    if (!listReports2.length) return (
         <div>
             <Typography variant={'h6'}>Нет отчетов, созданых вами.</Typography>
             <Typography>
@@ -213,12 +176,12 @@ export default function ReportsList() {
     return (
         <>
             <Box className={classes.root}>
-                <Typography>Только мои</Typography>
+                <Typography>Мои отчеты</Typography>
                 <AntSwitch
                     checked={user.settings.viewAll}
                     onChange={e => handleChangeSwitch(e.target.checked)}
                     inputProps={{'aria-label': 'ant design'}}/>
-                <Typography>Всей группы</Typography>
+                <Typography>Отчеты группы</Typography>
             </Box>
             <TableContainer>
                 <Table>
@@ -239,25 +202,6 @@ export default function ReportsList() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {/*<TableContainer>
-                <Table aria-label="collapsible table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell/>
-                            <TableCell>Группа</TableCell>
-                            <TableCell>Отчет</TableCell>
-                            <TableCell>Дата&nbsp;отчета</TableCell>
-                            <TableCell>Масштаб</TableCell>
-                            <TableCell/>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {listReports.map((row, idx) => (
-                            <Row key={idx} row={row}/>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>*/}
         </>
     );
 }

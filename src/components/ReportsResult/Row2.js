@@ -8,12 +8,10 @@ import {
     TableBody,
     TableCell,
     TableHead,
-    TableRow,
-    Typography
+    TableRow
 } from "@material-ui/core";
-import {KeyboardArrowUp, KeyboardArrowDown} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import {KeyboardArrowUp, KeyboardArrowDown, CheckCircleOutline} from "@material-ui/icons";
 
 const useRowStyles = makeStyles(theme => ({
     root: {
@@ -35,14 +33,14 @@ export function getStatusRow(status, classes) {
         case 'waiting':
             return <CircularProgress size={18} className={classes.root}/>
         case 'complete':
-            return <CheckCircleOutlineIcon size={18} className={classes.root}/>
+            return <CheckCircleOutline size={18} className={classes.root}/>
         default:
-            return <CircularProgress size={18} className={classes.root}/>
+            return <CircularProgress size={18} className={classes.root} color="secondary"/>
     }
 }
 
 export default function Row2({row}) {
-    const {id, lineVisible, lineHide} = row
+    const {lineVisible, lineHide} = row
     let history = useHistory();
     const [open, setOpen] = React.useState(false);
     let {url} = useRouteMatch();
@@ -76,7 +74,9 @@ export default function Row2({row}) {
                         color="primary"
                         size="small"
                         onClick={() => handleDownloadButton(lineVisible)}
-                    ><nobr>Смотреть отчет</nobr></Button>
+                    >
+                        <nobr>Смотреть отчет</nobr>
+                    </Button>
                 </TableCell>
             </TableRow>
             <TableRow
@@ -84,16 +84,13 @@ export default function Row2({row}) {
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Детали отчета
-                            </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>
                                         <TableCell>Дата запуска</TableCell>
                                         <TableCell>Дата выполнения</TableCell>
-                                        <TableCell>Автор</TableCell>
+                                        <TableCell width={220}>Автор</TableCell>
                                         <TableCell>Дата удаления</TableCell>
                                     </TableRow>
                                 </TableHead>

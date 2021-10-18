@@ -2,10 +2,22 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Moment from 'moment';
 import {ContextApp} from "../../reducer.js";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Switch, Box} from '@material-ui/core';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+    Switch,
+    Box,
+    Button
+} from '@material-ui/core';
 import {styled, makeStyles} from '@material-ui/core/styles'
 import delay from "../../utils/delay";
 import Row from "./Row";
+import Row2 from "./Row2";
 
 const useRowStyles = makeStyles(theme => ({
     root: {
@@ -18,10 +30,14 @@ const useRowStyles = makeStyles(theme => ({
         '& > * + *': {
             marginLeft: '10px'
         },
-    }
+    },
+    button: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
 }));
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
+const AntSwitch = styled(Switch)(({theme}) => ({
     width: 28,
     height: 16,
     padding: 0,
@@ -67,11 +83,12 @@ export default function ReportsList() {
     const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const classes = useRowStyles();
-    const {reportsDoneList = [], accessGroup, user} = state;
+    const {reportsDoneList = [], accessGroup, user, reportRequest} = state;
     const [rows, setRows] = React.useState([])
+    const [rows2, setRows2] = React.useState([])
 
     const filter = ({author: {login}}) => {
-        if(!user.settings.viewAll) return user.login === login
+        if (!user.settings.viewAll) return user.login === login
         return true
     }
 
@@ -127,11 +144,11 @@ export default function ReportsList() {
         })
     }, [dispatch, reportsDoneList])
 
-    const handleChangeSwitch = e => {
+    const handleChangeSwitch = value => {
         dispatch({
             type: 'updateSettings',
             payload: {
-                viewAll: e.target.checked
+                viewAll: value
             }
         })
     }
@@ -141,10 +158,47 @@ export default function ReportsList() {
         validateStatus()
     }, [createRows, validateStatus])
 
+    const createRows2 = React.useCallback(() => [{...reportRequest}].map(row => {
+        return (
+            {
+                id: 111,
+                lineVisible: {
+                    report: row.reportTpl.path,
+                    dateReport: Moment(row.reportRequestDateTime).format('DD.MM.YYYY'),
+                    office: `${row.unit.tb}${row.unit.osb && `/${row.unit.osb}`}${row.unit.vsp && `/${row.unit.vsp}`}`,
+                    status: row.reportRequestStatus
+                },
+                lineHide: {
+                    dateReportCreate: Moment(row.reportRequestDateTimeFormation).format('DD.MM.YYYY'),
+                    dateStart: Moment(row.reportRequestDateTimeLaunch).format('DD.MM.YYYY'),
+                    dateEnd: Moment(row.reportRequestDateTimeCompleteFormation).format('DD.MM.YYYY'),
+                    author: (<nobr>{row.author.name}</nobr>),
+                    dateRemove: row.scheduledDeletion && Moment(row.scheduledDeletion).format('DD.MM.YYYY'),
+                }
+            }
+        )
+    }), [])
+
+    React.useEffect(() => {
+        setRows2(createRows2().reverse())
+    }, [createRows2])
+
     if (!rows.length) return (
         <div>
             <Typography variant={'h6'}>Пока нет доступных отчетов.</Typography>
             <Typography><Link to={`./report-create`}>Создать отчет</Link></Typography>
+        </div>
+    )
+
+    if (!listReports.length) return (
+        <div>
+            <Typography variant={'h6'}>Нет отчетов, созданых вами.</Typography>
+            <Typography>
+                <Link
+                    className={classes.button}
+                    onClick={() => handleChangeSwitch(true)}>
+                    Смотреть все отчеты группы</Link>
+            </Typography>
         </div>
     )
 
@@ -154,11 +208,30 @@ export default function ReportsList() {
                 <Typography>Только мои</Typography>
                 <AntSwitch
                     checked={user.settings.viewAll}
-                    onChange={handleChangeSwitch}
+                    onChange={e => handleChangeSwitch(e.target.checked)}
                     inputProps={{'aria-label': 'ant design'}}/>
                 <Typography>Всей группы</Typography>
             </Box>
             <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell/>
+                            <TableCell>Наименование отчета</TableCell>
+                            <TableCell>Дата&nbsp;отчета</TableCell>
+                            <TableCell>Подразделение</TableCell>
+                            <TableCell>Статус</TableCell>
+                            <TableCell/>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows2.map((row, i) => (
+                            <Row2 key={i} row={row}/>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            {/*<TableContainer>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
@@ -176,7 +249,7 @@ export default function ReportsList() {
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer>*/}
         </>
     );
 }

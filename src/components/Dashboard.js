@@ -52,7 +52,7 @@ export default function Dashboard() {
         <>
             <div>
                 <div>
-                    Пример выбора отчета в группе <strong>dep_web_reports:</strong> <big>{totalDepWebReports}</big>
+                    Пример выбора отчета в группе <strong>dep_web_reports.</strong> Найдено: <big>{totalDepWebReports} отчетов</big>
                 </div>
                 <div style={{height: 10}}/>
                 <div>

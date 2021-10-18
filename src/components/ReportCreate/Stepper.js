@@ -61,33 +61,6 @@ const defaultDataForm = {
     status: 'waiting'
 }
 
-// const reportGenerationRequest = {
-//
-//     // Группа отчета
-//     reportGroup: 1,
-//     // Шаблон отчета
-//     reportTpl: 2,
-//     // Дата и время создания заявки на формирование отчета
-//     reportRequestDateTimeFormation: '',
-//     // Дата заказываемого отчета
-//     reportRequestDateTime: '',
-//     // Планируемые дата и время запуска формирования отчета
-//     reportRequestDateTimeLaunch: '',
-//     // Дата и время окончания формирования отчета (отчет готов к использованию)
-//     reportRequestDateTimeCompleteFormation: '',
-//     // ТБ/ОСБ/ВСП
-//     actualOffice: '',
-//     // Условие запуска
-//     startCondition: '',
-//     // Запланированные дата и время удаления сформированного отчета
-//     scheduledDeletion: '',
-//     // Расписание
-//     schedule: '',
-//     // Статус формирования отчета
-//     reportRequestStatus: ''
-//
-// }
-
 export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
     const {name, login} = state.user

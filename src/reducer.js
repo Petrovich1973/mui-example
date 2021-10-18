@@ -106,7 +106,52 @@ export const initialState = {
             viewAll: false
         }
     },
-    accessGroup: {}
+    accessGroup: {},
+    reportRequest: {
+
+        // Группа доступа
+        reportGroup: 'Группа доступа',
+
+        // Шаблон отчета
+        reportTpl: {
+            path: 'Группа отчета/Подгруппа отчета/Наименование отчета',
+            name: 'Наименование отчета'
+        },
+
+        // Дата и время создания заявки на формирование отчета
+        reportRequestDateTimeFormation: 1634550874757,
+
+        // Дата заказываемого отчета
+        reportRequestDateTime: 1633478400000,
+
+        // Планируемые дата и время запуска формирования отчета
+        reportRequestDateTimeLaunch: 1634551117232,
+
+        // Дата и время окончания формирования отчета (отчет готов к использованию)
+        reportRequestDateTimeCompleteFormation: 1634551281865,
+
+        // ТБ/ОСБ/ВСП
+        unit: {
+            tb: '38',
+            osb: '4540',
+            vsp: '0009'
+        },
+
+        // Автор
+        author: {
+            name: 'Выгодин В.В',
+            login: 'Vigodin-VV'
+        },
+
+        // Запланированные дата и время удаления сформированного отчета
+        scheduledDeletion: 1636156800000,
+
+        // Расписание
+        schedule: '',
+
+        // Статус формирования отчета witting | processing | complete | error
+        reportRequestStatus: 'witting'
+    }
 };
 
 export const reducerApp = (state, action) => {

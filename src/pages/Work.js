@@ -75,7 +75,7 @@ const routeConfig = [
     },
     {
         path: "/groups/:group/reports",
-        breadcrumb: 'Доступные отчеты',
+        breadcrumb: 'Отчеты',
     },
     {
         path: "/groups/:group/reports/:report",
@@ -102,7 +102,7 @@ export default function Work() {
     const classes = useStyles();
 
     // Нахожу пользователя в списке пользователей по параметру роутера и сохраняю его в reducer
-    const setUsers = React.useCallback(() => {
+    const setGroup = React.useCallback(() => {
         const res = groupList.map(el => createData(el)).find(el => el.group === group)
         dispatch({
             type: 'updateAccessGroup',
@@ -111,8 +111,8 @@ export default function Work() {
     }, [dispatch, group])
 
     React.useEffect(() => {
-        setUsers()
-    }, [setUsers])
+        setGroup()
+    }, [setGroup])
 
     return (
         <>

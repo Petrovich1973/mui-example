@@ -91,8 +91,12 @@ export default function ReportsList() {
         if (!user.settings.viewAll) return user.login === login
         return true
     }
-
+    const filter2 = ({login}) => {
+        if (!user.settings.viewAll) return user.login === login
+        return true
+    }
     const listReports = rows.filter(filter)
+    const listReports2 = rows2.filter(filter2)
 
     const createData = React.useCallback((id, name, calories, fat, carbs, protein, status, dateCreate, dateTimeStart, author) => {
         return {
@@ -158,12 +162,16 @@ export default function ReportsList() {
         validateStatus()
     }, [createRows, validateStatus])
 
-    const createRows2 = React.useCallback(() => [{...reportRequest}].map(row => {
+    const createRows2 = React.useCallback(() => [{...reportRequest}, {...reportRequest, author: {
+            name: 'Билецкая С.С.',
+            login: 'SSBiletskaya'
+        }}].map(row => {
         return (
             {
                 id: 111,
+                login: row.author.login,
                 lineVisible: {
-                    report: row.reportTpl.path,
+                    report: (<strong>{row.reportTpl.path}</strong>),
                     dateReport: Moment(row.reportRequestDateTime).format('DD.MM.YYYY'),
                     office: `${row.unit.tb}${row.unit.osb && `/${row.unit.osb}`}${row.unit.vsp && `/${row.unit.vsp}`}`,
                     status: row.reportRequestStatus
@@ -225,7 +233,7 @@ export default function ReportsList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows2.map((row, i) => (
+                        {listReports2.map((row, i) => (
                             <Row2 key={i} row={row}/>
                         ))}
                     </TableBody>

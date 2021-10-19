@@ -61,6 +61,24 @@ const defaultDataForm = {
     status: 'waiting'
 }
 
+const formTemplate = {
+    reportTpl: {
+        path: '',
+        name: ''
+    },
+    unit: {
+        tb: '',
+        osb: '',
+        vsp: ''
+    },
+    configure: {
+        reportRequestDateTime: Moment(),
+        durationStorage: 1, // 1 | 2 | 5
+        startCondition: 'immediately', // immediately | scheduled
+        startExecutionDateTime: Moment().add(1, 'day')
+    }
+}
+
 export default function Wizard() {
     const {state, dispatch} = React.useContext(ContextApp);
     const {name, login} = state.user
@@ -68,12 +86,13 @@ export default function Wizard() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
+    const [form, setForm] = React.useState(formTemplate);
     const steps = getSteps();
 
     function getSteps() {
         return [
-            activeStep !== 0 && dataForm.reportGroups ? dataForm.reportGroups : 'Выбор группы отчетности',
-            activeStep !== 1 && dataForm.reportsList ? dataForm.reportsList : 'Выбор отчета',
+            activeStep !== 0 && form.reportTpl.name ? form.reportTpl.path : 'Выбор заказываемого отчета',
+            activeStep !== 1 && dataForm.reportsList ? dataForm.reportsList : 'Выбор подразделения',
             'Конфигурация отчета'
         ];
     }
@@ -82,11 +101,15 @@ export default function Wizard() {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }
 
+    const onChangeFormStep1 = value => {
+        setForm(form => ({...form, ...value}))
+    }
+
     function getStepContent(step) {
         switch (step) {
             case 0:
                 return (
-                    <Step01 {...{dataForm, onChangeDataForm, handleNext}}/>
+                    <Step01 {...{dataForm, onChangeFormStep1, handleNext}}/>
                 );
             case 1:
                 return (
@@ -159,6 +182,7 @@ export default function Wizard() {
                                         onClick={handleStart}
                                         className={classes.button}
                                     >Запуск создания отчета</Button> : <Button
+                                        disabled={!Boolean(form.reportTpl.name.length)}
                                         variant="contained"
                                         color="primary"
                                         onClick={handleNext}

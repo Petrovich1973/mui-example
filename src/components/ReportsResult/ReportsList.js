@@ -85,9 +85,23 @@ export default function ReportsList() {
     const [rows2, setRows2] = React.useState([])
 
     const exampleList = React.useCallback(() => ([
-        {...reportRequest, reportRequestStatus: 'complete'},
         {
             ...reportRequest,
+            reportTpl: {
+                path: 'Меню  для расчета показателей краткосрочной ликвидности ф. 7-136 , 7-151/Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)',
+                name: 'Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)'
+            },
+            reportRequestDateTimeFormation: 1632530870740,
+            reportRequestStatus: 'complete'
+        },
+        {
+            ...reportRequest,
+            reportRequestDateTimeFormation: 1633540872750,
+            reportRequestStatus: 'complete'
+        },
+        {
+            ...reportRequest,
+            reportRequestDateTimeFormation: 1634550874752,
             reportTpl: {
                 path: 'ОТЧЕТЫ ПОЛЬЗОВАТЕЛЯ по данным интегратора экономических форм/Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ',
                 name: 'Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ'
@@ -149,8 +163,10 @@ export default function ReportsList() {
     //
     // }, [exampleList, createRows2])
 
+    const sort = (a, b) => a.reportRequestDateTimeFormation - b.reportRequestDateTimeFormation
+
     React.useEffect(() => {
-        setRows2(createRows2(exampleList()).reverse())
+        setRows2(createRows2(exampleList().sort(sort)))
         // validateStatus2()
     }, [createRows2, exampleList, /*validateStatus2*/])
 

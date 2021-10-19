@@ -6,9 +6,8 @@ import React from "react";
 export default function Step_01({dataForm, onChangeDataForm, handleNext}) {
     return (
         <span>
-            <span>На первом шаге предлагается выбрать группу отчетности</span>
             <Autocomplete
-                id="reportGroups"
+                id="reportTpl"
                 size={"medium"}
                 options={options}
                 getOptionLabel={(option) => option}

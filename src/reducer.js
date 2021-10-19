@@ -114,8 +114,8 @@ export const initialState = {
 
         // Шаблон отчета
         reportTpl: {
-            path: 'Группа отчета/Подгруппа отчета/Наименование отчета',
-            name: 'Наименование отчета'
+            path: 'ФОРМА 68/Отчеты для ф.68/Ф.68 В разрезе филиалов (рубли)',
+            name: 'Ф.68 В разрезе филиалов (рубли)'
         },
 
         // Дата и время создания заявки на формирование отчета
@@ -150,7 +150,7 @@ export const initialState = {
         schedule: '',
 
         // Статус формирования отчета witting | processing | complete | error
-        reportRequestStatus: 'witting'
+        reportRequestStatus: 'waiting'
     }
 };
 

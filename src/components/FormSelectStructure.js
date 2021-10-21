@@ -77,6 +77,7 @@ export default function FormSelectStructure({isReportSelect}) {
                 name: ''
             }
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [l1, l2, l3])
 
     const nesting = (prevSelect, n) => (

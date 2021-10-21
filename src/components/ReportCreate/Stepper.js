@@ -67,10 +67,10 @@ const formTemplate = {
         path: ''
     },
     configure: {
-        reportRequestDateTime: Moment().subtract(1, 'day'),
+        reportRequestDateTime: +Moment().subtract(1, 'day'),
         durationStorage: '1', // 1 | 2 | 5
         startCondition: 'immediately', // immediately | scheduled
-        startExecutionDateTime: Moment().add(1, 'day'),
+        startExecutionDateTime: +Moment().add(1, 'day'),
         repeatExecution: 'disposable'
     }
 }
@@ -80,11 +80,9 @@ export default function Wizard() {
     const {name, login} = state.user
     let {group} = useParams()
     const classes = useStyles()
-    const [activeStep, setActiveStep] = React.useState(2)
+    const [activeStep, setActiveStep] = React.useState(0)
     const [form, setForm] = React.useState(formTemplate)
     const steps = getSteps()
-
-
 
     function getSteps() {
         return [
@@ -144,15 +142,15 @@ export default function Wizard() {
     }
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1)
     }
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        setActiveStep((prevActiveStep) => prevActiveStep - 1)
     }
 
     const handleReset = () => {
-        setActiveStep(0);
+        setActiveStep(0)
         setForm(formTemplate)
     }
 
@@ -162,7 +160,7 @@ export default function Wizard() {
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>
                 {steps.map((label, index) => (
-                    <Step key={label}>
+                    <Step key={index}>
                         <StepLabel><span className={classes.stepLabel}>{label}</span></StepLabel>
                         <StepContent>
                             <div>{getStepContent(index)}</div>

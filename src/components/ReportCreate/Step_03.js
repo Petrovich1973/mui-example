@@ -1,14 +1,14 @@
-import React from "react";
-import FormControl from "@material-ui/core/FormControl";
-import {FormControlLabel, FormLabel, RadioGroup} from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import StyledRadio from "../StyledRadio";
-import Moment from "moment";
-import Grid from "@material-ui/core/Grid";
-import * as PropTypes from "prop-types";
-import {makeStyles} from "@material-ui/core/styles";
+import React from "react"
+import FormControl from "@material-ui/core/FormControl"
+import {FormControlLabel, FormLabel, RadioGroup} from "@material-ui/core"
+import TextField from "@material-ui/core/TextField"
+import StyledRadio from "../StyledRadio"
+import Grid from "@material-ui/core/Grid"
+import * as PropTypes from "prop-types"
+import {makeStyles} from "@material-ui/core/styles"
 
-Moment.locale('ru');
+import Moment from "moment"
+Moment.locale('ru')
 
 const optionsListExecution = [
     {value: 'immediately', label: 'Сейчас'},
@@ -58,16 +58,16 @@ const useStyles = makeStyles((theme) => ({
     row: {
         marginBottom: theme.spacing(2)
     }
-}));
+}))
 
 function Item(props) {
-    return null;
+    return null
 }
 
-Item.propTypes = {children: PropTypes.node};
+Item.propTypes = {children: PropTypes.node}
 
 export default function Step_03({form, onChangeFormConfigure}) {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <Grid container spacing={2} className={classes.root}>
             <Grid item xs={12} className={classes.row}>
@@ -78,14 +78,12 @@ export default function Step_03({form, onChangeFormConfigure}) {
                     variant="outlined"
                     label="Дата отчета"
                     type="date"
-                    // format="dd/MM/yyyy"
-                    value={form.reportRequestDateTime}
-                    // defaultValue="2021-09-10"
+                    value={Moment(form.reportRequestDateTime).format("YYYY-MM-DD")}
                     InputLabelProps={{
-                        shrink: true,
+                        shrink: true
                     }}
                     onChange={(event) => {
-                        onChangeFormConfigure({reportRequestDateTime: event.target.value});
+                        onChangeFormConfigure({reportRequestDateTime: +Moment(event.target.value)})
                     }}
                 />
             </Grid>
@@ -104,7 +102,7 @@ export default function Step_03({form, onChangeFormConfigure}) {
                                 row
                                 name="durationStorage"
                                 onChange={(event, newValue) => {
-                                    onChangeFormConfigure({durationStorage: newValue});
+                                    onChangeFormConfigure({durationStorage: newValue})
                                 }}>
                                 {optionsListStorage.map((option, idx) => (
                                     <FormControlLabel
@@ -129,7 +127,7 @@ export default function Step_03({form, onChangeFormConfigure}) {
                                 name="startCondition"
                                 onChange={(event, newValue) => {
                                     if(newValue === 'immediately') console.log('Надо сбрасывать повторение и дата первого запуска!')
-                                    onChangeFormConfigure({startCondition: newValue});
+                                    onChangeFormConfigure({startCondition: newValue})
                                 }}>
                                 {optionsListExecution.map((option, idx) => (
                                     <FormControlLabel
@@ -152,14 +150,12 @@ export default function Step_03({form, onChangeFormConfigure}) {
                                 variant="outlined"
                                 label="Дата первого запуска"
                                 type="date"
-                                // format="dd/MM/yyyy"
-                                value={form.startExecutionDateTime}
-                                // defaultValue="2021-09-10"
+                                value={Moment(form.startExecutionDateTime).format("YYYY-MM-DD")}
                                 InputLabelProps={{
-                                    shrink: true,
+                                    shrink: true
                                 }}
                                 onChange={(event) => {
-                                    onChangeFormConfigure({startExecutionDateTime: event.target.value});
+                                    onChangeFormConfigure({startExecutionDateTime: +Moment(event.target.value)})
                                 }}
                             />
                         </Grid>
@@ -176,7 +172,7 @@ export default function Step_03({form, onChangeFormConfigure}) {
                                     row
                                     name="repeatExecution"
                                     onChange={(event, newValue) => {
-                                        onChangeFormConfigure({repeatExecution: newValue});
+                                        onChangeFormConfigure({repeatExecution: newValue})
                                     }}>
                                     {optionsListRepeat.map((option, idx) => (
                                         <FormControlLabel

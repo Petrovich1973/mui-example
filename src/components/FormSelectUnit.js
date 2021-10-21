@@ -72,6 +72,7 @@ export default function FormSelectUnit({isUnitSelect}) {
                 path: ''
             }
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [l1, l2, l3])
 
     const renderInput = (params, label) => (

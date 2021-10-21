@@ -34,18 +34,12 @@ const useStyles = makeStyles((theme) => ({
     resetContainer: {
         padding: theme.spacing(3),
     },
-    textField: {
-        marginTop: theme.spacing(2),
-        marginRight: theme.spacing(3),
-        width: 250
-    },
-    radioLabel: {
-        whiteSpace: "nowrap",
-        marginBottom: '10px'
-    },
-    label: {
+    stepLabel: {
         display: 'flex',
         alignItems: 'center',
+        '& svg': {
+            fill: '#ccc'
+        },
         '& em': {
             opacity: '0.6',
             fontSize: '90%'
@@ -101,7 +95,7 @@ export default function Wizard() {
     const {name, login} = state.user
     let {group} = useParams();
     const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = React.useState(2);
     const [dataForm, setDataForm] = React.useState(defaultDataForm);
     const [form, setForm] = React.useState(formTemplate);
     const steps = getSteps();
@@ -185,7 +179,7 @@ export default function Wizard() {
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>
                 {steps.map((label, index) => (
                     <Step key={label}>
-                        <StepLabel><span className={classes.label}>{label}</span></StepLabel>
+                        <StepLabel><span className={classes.stepLabel}>{label}</span></StepLabel>
                         <StepContent>
                             <div>{getStepContent(index)}</div>
                             <div className={classes.actionsContainer}>

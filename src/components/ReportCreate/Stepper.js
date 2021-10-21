@@ -1,21 +1,21 @@
-import React from 'react';
+import React from 'react'
 import {NavLink, useParams} from "react-router-dom"
-import {ContextApp} from "../../reducer.js";
-import {makeStyles} from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Link from "@material-ui/core/Link";
-import Moment from "moment";
-import Step01 from "./Step_01";
-import Step02 from "./Step_02";
-import Step03 from "./Step_03";
+import {ContextApp} from "../../reducer.js"
+import {makeStyles} from '@material-ui/core/styles'
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepLabel from '@material-ui/core/StepLabel'
+import StepContent from '@material-ui/core/StepContent'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Link from "@material-ui/core/Link"
+import Step01 from "./Step_01"
+import Step02 from "./Step_02"
+import Step03 from "./Step_03"
 
-Moment.locale('ru');
+import Moment from "moment"
+Moment.locale('ru')
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,23 +53,7 @@ const useStyles = makeStyles((theme) => ({
             }
         }
     }
-}));
-
-const defaultDataForm = {
-    reportGroups: null,
-    reportsList: null,
-    date: Moment().format('yyyy-MM-DD'),
-    dateCreate: Moment().format('yyyy-MM-DD'),
-    dateTimeStart: null,
-    method: 'tb',
-    execution: 'now',
-    tb: null,
-    gosb: null,
-    vsp: null,
-    range: 'disposable',
-    durationStorage: '1',
-    status: 'waiting'
-}
+}))
 
 const formTemplate = {
     reportTpl: {
@@ -83,22 +67,22 @@ const formTemplate = {
         path: ''
     },
     configure: {
-        reportRequestDateTime: Moment(),
-        durationStorage: 1, // 1 | 2 | 5
+        reportRequestDateTime: Moment().subtract(1, 'day'),
+        durationStorage: '1', // 1 | 2 | 5
         startCondition: 'immediately', // immediately | scheduled
-        startExecutionDateTime: Moment().add(1, 'day')
+        startExecutionDateTime: Moment().add(1, 'day'),
+        repeatExecution: 'disposable'
     }
 }
 
 export default function Wizard() {
-    const {state, dispatch} = React.useContext(ContextApp);
+    const {state, dispatch} = React.useContext(ContextApp)
     const {name, login} = state.user
-    let {group} = useParams();
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(2);
-    const [dataForm, setDataForm] = React.useState(defaultDataForm);
-    const [form, setForm] = React.useState(formTemplate);
-    const steps = getSteps();
+    let {group} = useParams()
+    const classes = useStyles()
+    const [activeStep, setActiveStep] = React.useState(2)
+    const [form, setForm] = React.useState(formTemplate)
+    const steps = getSteps()
 
 
 
@@ -107,38 +91,38 @@ export default function Wizard() {
             activeStep !== 0 && form.reportTpl.name ? form.reportTpl.path : 'Выбор заказываемого отчета',
             activeStep !== 1 && form.unit.tb ? form.unit.path : 'Выбор подразделения',
             'Конфигурация отчета'
-        ];
+        ]
     }
 
-    const onChangeDataForm = value => {
-        setDataForm(dataForm => ({...dataForm, ...value}))
-    }
-
-    const onChangeFormStep = value => {
+    const onChangeForm = value => {
         setForm(form => ({...form, ...value}))
+    }
+
+    const onChangeFormConfigure = value => {
+        setForm(form => ({...form, configure: {...form.configure, ...value}}))
     }
 
     function getStepContent(step) {
         switch (step) {
             case 0:
                 return (
-                    <Step01 {...{onChangeFormStep}}/>
-                );
+                    <Step01 {...{onChangeForm}}/>
+                )
             case 1:
                 return (
-                    <Step02 {...{onChangeFormStep}}/>
-                );
+                    <Step02 {...{onChangeForm}}/>
+                )
             case 2:
                 return (
-                    <Step03 {...{classes, dataForm, onChangeDataForm}}/>
-                );
+                    <Step03 {...{form: form.configure, onChangeFormConfigure}}/>
+                )
             default:
-                return 'Unknown step';
+                return 'Unknown step'
         }
     }
 
     const handleStart = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1)
         const author = {
             name,
             login
@@ -150,27 +134,27 @@ export default function Wizard() {
                     ...state.reportsDoneList,
                     {
                         id: Date.now(),
-                        ...dataForm,
+                        ...form,
                         author,
                         dateCreate: Moment().format('DD.MM.YYYY')
                     }
                 ]
             }
         })
-    };
+    }
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
+    }
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    }
 
     const handleReset = () => {
         setActiveStep(0);
-        setDataForm(defaultDataForm)
-    };
+        setForm(formTemplate)
+    }
 
     const isDisabledNext = !Boolean(form.reportTpl.name) || (activeStep === 1 && !Boolean(form.unit.tb))
 
@@ -224,5 +208,5 @@ export default function Wizard() {
                 </Paper>
             )}
         </div>
-    );
+    )
 }

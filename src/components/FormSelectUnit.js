@@ -1,8 +1,8 @@
 import React from 'react'
 import Autocomplete from "@material-ui/lab/Autocomplete"
-import reports from '../reports.json'
+import {tbList, osbList, vspList} from '../data.js'
 import TextField from "@material-ui/core/TextField";
-import {ChevronRight} from '@material-ui/icons';
+import {ChevronRight} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,85 +16,75 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const rows = reports.root.row
-    .filter(f => (f.NAME_PROC !== "no proc"))
-    .filter(f => (f.NAME_REPORT !== "Тестовый отчет для отладки"))
-    .filter(f => (f.TITLE !== "меню 1"))
-
-export const resultList = rows
-    .reduce((sum, current) => {
-        if (current.GROUP_NAME) sum.push({...current, children: []})
-        else sum[sum.length - 1].children.push({...current, children: []})
-        return sum
-    }, [])
-    .filter(f => (f.GROUP_NAME === 'dep_web_reports'))
-    .reduce((sum, current) => {
-        current.children.forEach(row => {
-            sum.push(row)
-        })
-        return sum
-    }, [])
-
-export default function FormSelectStructure({isReportSelect}) {
+export default function FormSelectUnit({isUnitSelect}) {
     const [l1, setL1] = React.useState(null)
     const [l2, setL2] = React.useState(null)
     const [l3, setL3] = React.useState(null)
     const classes = useStyles();
 
     const path = <span className={classes.root}>
-        {[l1, l2, l3].map((el, i) => {
-            if (!el) return (el)
-            if (i === 0) return (
+        {[l1,l2,l3].map((el, i) => {
+            if(!el) return (el)
+            if(i === 0) return (
                 <span key={i}>
-                    <small><em>{el.MENU_NUMBER}</em></small>
+                    <small><em>ТБ</em></small>
                     &nbsp;
-                    <strong>{el.NAME_REPORT || el.TITLE}</strong>
+                    <strong>{el.value} {el.label}</strong>
+                </span>
+            )
+            if(i === 1) return (
+                <span key={i}>
+                    <ChevronRight/>
+                    <small><em>ОСБ</em></small>
+                    &nbsp;
+                    <strong>{el.label}</strong>
                 </span>
             )
             return (
                 <span key={i}>
                     <ChevronRight/>
-                    <small><em>{el.MENU_NUMBER}</em></small>
+                    <small><em>ВСП</em></small>
                     &nbsp;
-                    <strong>{el.NAME_REPORT || el.TITLE}</strong>
+                    <strong>{el.label}</strong>
                 </span>
             )
         })}
     </span>
 
     React.useEffect(() => {
-        const name = (l1 && l1.NAME_REPORT) || (l2 && l2.NAME_REPORT) || (l3 && l3.NAME_REPORT)
-        const reportTpl = {
-            reportTpl: {
-                path,
-                name
+        const tb = (l1 && l1.value) || null
+        const osb = (l2 && l2.value) || null
+        const vsp = (l3 && l3.value) || null
+        const unit = {
+            unit: {
+                tb,
+                osb,
+                vsp,
+                path
             }
         }
-        if (name) isReportSelect(reportTpl)
-        else isReportSelect({
-            reportTpl: {
-                path: '',
-                name: ''
+        if (tb) isUnitSelect(unit)
+        else isUnitSelect({
+            unit: {
+                tb: '',
+                osb: '',
+                vsp: '',
+                path: ''
             }
         })
     }, [l1, l2, l3])
 
-    const nesting = (prevSelect, n) => (
-        resultList.filter(f => f.MENU_NUMBER.split('.').length === n &&
-            prevSelect.MENU_NUMBER === f.MENU_NUMBER.split('.').splice(0, n - 1).join('.'))
-    )
-
-    const renderInput = (params) => (
+    const renderInput = (params, label) => (
         <TextField
             autoFocus
-            label=""
+            label={label}
             {...params}
             placeholder="Не выбрано"
             variant="outlined"/>
     )
-    const getOptionLabel = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
-    const renderOption = option => `${option.MENU_NUMBER} ${option.NAME_REPORT || option.TITLE}`
-    const getOptionSelected = (option, value) => option.TITLE === value.TITLE
+    const getOptionLabel = option => `${option.label}`
+    const renderOption = option => `${option.label}`
+    const getOptionSelected = (option, value) => option.label === value.label
 
     return (
         <>
@@ -108,21 +98,21 @@ export default function FormSelectStructure({isReportSelect}) {
                     noOptionsText={'Ничего не найдено'}
                     id="l1"
                     size={"medium"}
-                    options={resultList.filter(f => f.MENU_NUMBER.split('.').length === 2)}
-                    getOptionLabel={getOptionLabel}
-                    renderOption={renderOption}
+                    options={tbList}
+                    getOptionLabel={option => `${option.value} ${option.label}`}
+                    renderOption={option => `${option.value} ${option.label}`}
                     getOptionSelected={getOptionSelected}
-                    style={{width: 450}}
+                    style={{width: 300}}
                     value={l1}
                     onChange={(event, newValue) => {
                         setL1(newValue)
                         setL2(null)
                         setL3(null)
                     }}
-                    renderInput={renderInput}
+                    renderInput={params => renderInput(params, 'ТБ')}
                 />
             </div>
-            {l1 && nesting(l1, 3).length ?
+            {l1 ?
                 <div>
                     <div style={{height: 10}}/>
                     <Autocomplete
@@ -130,20 +120,20 @@ export default function FormSelectStructure({isReportSelect}) {
                         noOptionsText={'Ничего не найдено'}
                         id="l2"
                         size={"medium"}
-                        options={nesting(l1, 3)}
+                        options={osbList}
                         getOptionLabel={getOptionLabel}
                         renderOption={renderOption}
                         getOptionSelected={getOptionSelected}
-                        style={{width: 450}}
+                        style={{width: 300}}
                         value={l2}
                         onChange={(event, newValue) => {
                             setL2(newValue)
                             setL3(null)
                         }}
-                        renderInput={renderInput}
+                        renderInput={params => renderInput(params, 'ОСБ')}
                     />
                 </div> : null}
-            {l2 && nesting(l2, 4).length ?
+            {l2 ?
                 <div>
                     <div style={{height: 10}}/>
                     <Autocomplete
@@ -151,16 +141,16 @@ export default function FormSelectStructure({isReportSelect}) {
                         noOptionsText={'Ничего не найдено'}
                         id="l3"
                         size={"medium"}
-                        options={nesting(l2, 4)}
+                        options={vspList}
                         getOptionLabel={getOptionLabel}
                         renderOption={renderOption}
                         getOptionSelected={getOptionSelected}
-                        style={{width: 450}}
+                        style={{width: 300}}
                         value={l3}
                         onChange={(event, newValue) => {
                             setL3(newValue)
                         }}
-                        renderInput={renderInput}
+                        renderInput={params => renderInput(params, 'ВСП')}
                     />
                 </div> : null}
         </>

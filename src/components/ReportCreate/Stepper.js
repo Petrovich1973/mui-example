@@ -42,6 +42,22 @@ const useStyles = makeStyles((theme) => ({
     radioLabel: {
         whiteSpace: "nowrap",
         marginBottom: '10px'
+    },
+    label: {
+        display: 'flex',
+        alignItems: 'center',
+        '& em': {
+            opacity: '0.6',
+            fontSize: '90%'
+        },
+        '& > *': {
+            display: 'flex',
+            alignItems: 'center',
+            '& > *': {
+                display: 'flex',
+                alignItems: 'center',
+            }
+        }
     }
 }));
 
@@ -69,7 +85,8 @@ const formTemplate = {
     unit: {
         tb: '',
         osb: '',
-        vsp: ''
+        vsp: '',
+        path: ''
     },
     configure: {
         reportRequestDateTime: Moment(),
@@ -89,10 +106,12 @@ export default function Wizard() {
     const [form, setForm] = React.useState(formTemplate);
     const steps = getSteps();
 
+
+
     function getSteps() {
         return [
             activeStep !== 0 && form.reportTpl.name ? form.reportTpl.path : 'Выбор заказываемого отчета',
-            activeStep !== 1 && dataForm.reportsList ? dataForm.reportsList : 'Выбор подразделения',
+            activeStep !== 1 && form.unit.tb ? form.unit.path : 'Выбор подразделения',
             'Конфигурация отчета'
         ];
     }
@@ -101,7 +120,7 @@ export default function Wizard() {
         setDataForm(dataForm => ({...dataForm, ...value}))
     }
 
-    const onChangeFormStep1 = value => {
+    const onChangeFormStep = value => {
         setForm(form => ({...form, ...value}))
     }
 
@@ -109,11 +128,11 @@ export default function Wizard() {
         switch (step) {
             case 0:
                 return (
-                    <Step01 {...{dataForm, onChangeFormStep1, handleNext}}/>
+                    <Step01 {...{onChangeFormStep}}/>
                 );
             case 1:
                 return (
-                    <Step02 {...{dataForm, onChangeDataForm, handleNext}}/>
+                    <Step02 {...{onChangeFormStep}}/>
                 );
             case 2:
                 return (
@@ -159,12 +178,14 @@ export default function Wizard() {
         setDataForm(defaultDataForm)
     };
 
+    const isDisabledNext = !Boolean(form.reportTpl.name) || (activeStep === 1 && !Boolean(form.unit.tb))
+
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>
                 {steps.map((label, index) => (
                     <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
+                        <StepLabel><span className={classes.label}>{label}</span></StepLabel>
                         <StepContent>
                             <div>{getStepContent(index)}</div>
                             <div className={classes.actionsContainer}>
@@ -182,7 +203,7 @@ export default function Wizard() {
                                         onClick={handleStart}
                                         className={classes.button}
                                     >Запуск создания отчета</Button> : <Button
-                                        disabled={!Boolean(form.reportTpl.name.length)}
+                                        disabled={isDisabledNext}
                                         variant="contained"
                                         color="primary"
                                         onClick={handleNext}

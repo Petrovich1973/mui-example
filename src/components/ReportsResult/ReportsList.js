@@ -81,10 +81,11 @@ export default function ReportsList() {
     const {state, dispatch} = React.useContext(ContextApp);
     Moment.locale('ru');
     const classes = useRowStyles();
-    const {user, reportRequest} = state;
+    const {user, reportRequest, reportsDoneList} = state;
     const [rows2, setRows2] = React.useState([])
 
     const exampleList = React.useCallback(() => ([
+        ...reportsDoneList,
         {
             ...reportRequest,
             reportTpl: {
@@ -136,14 +137,14 @@ export default function ReportsList() {
                 login: row.author.login,
                 lineVisible: {
                     report: (<strong>{row.reportTpl.path}</strong>),
-                    dateReport: Moment(row.reportRequestDateTime).format('DD.MM.YYYY'),
+                    dateReport: Moment(row.reportDateTime).format('DD.MM.YYYY'),
                     office: `${row.unit.tb}${row.unit.osb && `/${row.unit.osb}`}${row.unit.vsp && `/${row.unit.vsp}`}`,
                     status: row.reportRequestStatus
                 },
                 lineHide: {
                     dateReportCreate: Moment(row.reportRequestDateTimeFormation).format('DD.MM.YYYY'),
                     dateStart: Moment(row.reportRequestDateTimeLaunch).format('DD.MM.YYYY'),
-                    dateEnd: Moment(row.reportRequestDateTimeCompleteFormation).format('DD.MM.YYYY'),
+                    dateEnd: row.reportRequestDateTimeCompleteFormation ? Moment(row.reportRequestDateTimeCompleteFormation).format('DD.MM.YYYY') : '---',
                     author: (<nobr>{row.author.name}</nobr>),
                     dateRemove: row.scheduledDeletion && Moment(row.scheduledDeletion).format('DD.MM.YYYY'),
                 }
@@ -166,7 +167,7 @@ export default function ReportsList() {
     const sort = (a, b) => a.reportRequestDateTimeFormation - b.reportRequestDateTimeFormation
 
     React.useEffect(() => {
-        setRows2(createRows2(exampleList().sort(sort)))
+        setRows2(createRows2(exampleList().sort(sort).reverse()))
         // validateStatus2()
     }, [createRows2, exampleList, /*validateStatus2*/])
 

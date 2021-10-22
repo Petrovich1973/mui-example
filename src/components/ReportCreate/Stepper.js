@@ -15,6 +15,7 @@ import Step02 from "./Step_02"
 import Step03 from "./Step_03"
 
 import Moment from "moment"
+
 Moment.locale('ru')
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     },
     resetContainer: {
         padding: theme.spacing(3),
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(7),
+        display: 'inline-block'
     },
     stepLabel: {
         display: 'flex',
@@ -67,7 +71,7 @@ const formTemplate = {
         path: ''
     },
     configure: {
-        reportRequestDateTime: +Moment().subtract(1, 'day'),
+        reportDateTime: +Moment().subtract(1, 'day'),
         durationStorage: '1', // 1 | 2 | 5
         startCondition: 'immediately', // immediately | scheduled
         startExecutionDateTime: +Moment().add(1, 'day'),
@@ -125,6 +129,45 @@ export default function Wizard() {
             name,
             login
         }
+        const reportRequestDateTimeLaunch = form.configure.startCondition === 'scheduled' ? form.configure.startExecutionDateTime : +Moment()
+        const newReport = {
+
+            // Группа доступа
+            reportGroup: 'Группа доступа',
+
+            // Шаблон отчета
+            reportTpl: form.reportTpl,
+
+            // Дата и время создания заявки на формирование отчета
+            reportRequestDateTimeFormation: +Moment(),
+
+            // Дата заказываемого отчета
+            reportDateTime: form.configure.reportDateTime,
+
+            // Планируемые дата и время запуска формирования отчета
+            reportRequestDateTimeLaunch,
+
+            // Дата и время окончания формирования отчета (отчет готов к использованию)
+            reportRequestDateTimeCompleteFormation: null,
+
+            // ТБ/ОСБ/ВСП
+            unit: form.unit,
+
+            // Автор
+            author,
+
+            // Запланированные дата и время удаления сформированного отчета
+            scheduledDeletion: +Moment(reportRequestDateTimeLaunch).add(+form.configure.durationStorage, 'day'),
+
+            // Расписание
+            schedule: form.configure.startCondition,
+
+            // Повторение, если выбрано расписание
+            repeatExecution: form.configure.repeatExecution,
+
+            // Статус формирования отчета witting | processing | complete | error
+            reportRequestStatus: 'waiting',
+        }
         dispatch({
             type: 'updateState',
             payload: {
@@ -132,9 +175,7 @@ export default function Wizard() {
                     ...state.reportsDoneList,
                     {
                         id: Date.now(),
-                        ...form,
-                        author,
-                        dateCreate: Moment().format('DD.MM.YYYY')
+                        ...newReport
                     }
                 ]
             }
@@ -155,7 +196,7 @@ export default function Wizard() {
     }
 
     const isDisabledNext = !Boolean(form.reportTpl.name) || (activeStep === 1 && !Boolean(form.unit.tb))
-console.log(form)
+    console.log(form)
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>
@@ -193,9 +234,8 @@ console.log(form)
             </Stepper>
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>Запрос создания отчета создан и отправлен на обработку</Typography>
-                    <Typography>Формирование отчета займет некоторое время. Статус <strong>Ожидает
-                        обработку</strong></Typography>
+                    <Typography>Отлично! Запрос на создание отчета создан и отправлен на обработку</Typography>
+                    <Typography>Формирование отчета займет некоторое время.</Typography>
                     <Typography>
                         Данный отчет помещен в список доступных отчетов.
                         <Link component={NavLink} to={`/groups/${group}/reports`}>Смотреть</Link>

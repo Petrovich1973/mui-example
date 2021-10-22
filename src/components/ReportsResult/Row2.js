@@ -89,7 +89,7 @@ export default function Row2({row}) {
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>
                                         <TableCell>Дата запуска</TableCell>
-                                        <TableCell>Дата выполнения</TableCell>
+                                        <TableCell>Дата успешного выполнения</TableCell>
                                         <TableCell width={220}>Автор</TableCell>
                                         <TableCell>Дата удаления</TableCell>
                                     </TableRow>

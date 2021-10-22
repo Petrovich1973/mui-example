@@ -93,11 +93,13 @@ export default function ReportsList() {
                 name: 'Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)'
             },
             reportRequestDateTimeFormation: 1632530870740,
+            reportRequestDateTimeCompleteFormation: 1634551281865,
             reportRequestStatus: 'complete'
         },
         {
             ...reportRequest,
             reportRequestDateTimeFormation: 1633540872750,
+            reportRequestDateTimeCompleteFormation: 1634541281865,
             reportRequestStatus: 'complete'
         },
         {

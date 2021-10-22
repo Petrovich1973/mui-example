@@ -37,7 +37,7 @@ export const initialState = {
         reportRequestDateTimeLaunch: 1634551117232,
 
         // Дата и время окончания формирования отчета (отчет готов к использованию)
-        reportRequestDateTimeCompleteFormation: 1634551281865,
+        reportRequestDateTimeCompleteFormation: null,
 
         // ТБ/ОСБ/ВСП
         unit: {

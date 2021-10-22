@@ -155,7 +155,7 @@ export default function Wizard() {
     }
 
     const isDisabledNext = !Boolean(form.reportTpl.name) || (activeStep === 1 && !Boolean(form.unit.tb))
-
+console.log(form)
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>

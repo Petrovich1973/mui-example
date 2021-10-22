@@ -1,11 +1,9 @@
 import React from "react"
-import FormControl from "@material-ui/core/FormControl"
-import {FormControlLabel, FormLabel, RadioGroup} from "@material-ui/core"
-import TextField from "@material-ui/core/TextField"
+import {FormControlLabel, FormLabel, RadioGroup, Grid, TextField, FormControl} from "@material-ui/core"
 import StyledRadio from "../StyledRadio"
-import Grid from "@material-ui/core/Grid"
 import * as PropTypes from "prop-types"
 import {makeStyles} from "@material-ui/core/styles"
+import { useToasts } from 'react-toast-notifications'
 
 import Moment from "moment"
 Moment.locale('ru')
@@ -52,8 +50,9 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(5)
     },
     scheduled: {
-        border: '1px solid #ccc',
-        borderRadius: 5
+        backgroundColor: '#2385c114',
+        borderRadius: 5,
+        padding: theme.spacing(2.8)
     },
     row: {
         marginBottom: theme.spacing(2)
@@ -68,6 +67,7 @@ Item.propTypes = {children: PropTypes.node}
 
 export default function Step_03({form, onChangeFormConfigure}) {
     const classes = useStyles()
+    const { addToast } = useToasts()
     return (
         <Grid container spacing={2} className={classes.root}>
             <Grid item xs={12} className={classes.row}>
@@ -140,9 +140,10 @@ export default function Step_03({form, onChangeFormConfigure}) {
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    {form.startCondition === 'scheduled' && <Grid item xs={6}>
                         <Grid container spacing={2} className={classes.scheduled}>
                         <Grid item>
+                            <Grid container>
                             <TextField
                                 className={classes.dateField}
                                 size="small"
@@ -155,9 +156,23 @@ export default function Step_03({form, onChangeFormConfigure}) {
                                     shrink: true
                                 }}
                                 onChange={(event) => {
-                                    onChangeFormConfigure({startExecutionDateTime: +Moment(event.target.value)})
+                                    const contentToast = (
+                                        <div>
+                                            <h3>Дата ({Moment(event.target.value).format('DD.MM.yyyy')}) не выбрана!</h3>
+                                            <p><strong>Дата первого запуска</strong> не может быть раньше чем <strong>дата отчета</strong>!</p>
+                                            <p>Пожалуйста выберите другую дату</p>
+                                        </div>
+                                    )
+                                    if(+Moment(event.target.value) > form.reportRequestDateTime)
+                                        onChangeFormConfigure({startExecutionDateTime: +Moment(event.target.value)})
+                                    else
+                                        addToast(contentToast, {
+                                            appearance: 'error',
+                                            autoDismiss: true
+                                        })
                                 }}
                             />
+                            </Grid>
                         </Grid>
                         <Grid item>
                             <FormControl component="fieldset" className={classes.textField} style={{marginRight: 0}}>
@@ -186,7 +201,7 @@ export default function Step_03({form, onChangeFormConfigure}) {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    </Grid>
+                    </Grid>}
                 </Grid>
             </Grid>
         </Grid>

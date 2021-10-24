@@ -25,6 +25,12 @@ const useRowStyles = makeStyles(theme => ({
     status: {
         margin: '0 auto',
         display: 'block'
+    },
+    reportName: {
+        '& span': {
+            display: 'flex',
+            alignItems: 'center'
+        }
     }
 }));
 
@@ -61,7 +67,7 @@ export default function Row2({row}) {
                         {open ? <KeyboardArrowUp/> : <KeyboardArrowDown/>}
                     </IconButton>
                 </TableCell>
-                <TableCell>{lineVisible.report}</TableCell>
+                <TableCell className={classes.reportName}>{lineVisible.report}</TableCell>
                 <TableCell>{lineVisible.dateReport}</TableCell>
                 <TableCell>{lineVisible.office}</TableCell>
                 <TableCell align="center" style={{verticalAlign: 'middle'}}>

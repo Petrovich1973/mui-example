@@ -89,7 +89,7 @@ export default function ReportsList() {
         {
             ...reportRequest,
             reportTpl: {
-                path: 'Меню  для расчета показателей краткосрочной ликвидности ф. 7-136 , 7-151/Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)',
+                path: 'Меню  для расчета показателей краткосрочной ликвидности ф. 7-136 , 7-151 / Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)',
                 name: 'Расчет показателей краткосрочной ликвидности ф. 7-136, 7-151 (сборщик данных)'
             },
             reportRequestDateTimeFormation: 1632530870740,
@@ -106,7 +106,7 @@ export default function ReportsList() {
             ...reportRequest,
             reportRequestDateTimeFormation: 1634550874752,
             reportTpl: {
-                path: 'ОТЧЕТЫ ПОЛЬЗОВАТЕЛЯ по данным интегратора экономических форм/Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ',
+                path: 'ОТЧЕТЫ ПОЛЬЗОВАТЕЛЯ по данным интегратора экономических форм / Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ',
                 name: 'Ф. 1-35 Распределение средств физ. лиц по размеру вклада в разрезе субъектов РФ'
             },
             author: {
@@ -133,14 +133,15 @@ export default function ReportsList() {
     }
 
     const createRows2 = React.useCallback((list) => list.map(row => {
+
         return (
             {
                 id: 111,
                 login: row.author.login,
                 lineVisible: {
-                    report: (<strong>{row.reportTpl.path}</strong>),
+                    report: row.reportTpl.fullName || row.reportTpl.path,
                     dateReport: Moment(row.reportDateTime).format('DD.MM.YYYY'),
-                    office: `${row.unit.tb}${row.unit.osb && `/${row.unit.osb}`}${row.unit.vsp && `/${row.unit.vsp}`}`,
+                    office: `${row.unit.tb}${row.unit.osb ? `/${row.unit.osb}` : ''}${row.unit.vsp ? `/${row.unit.vsp}` : ''}`,
                     status: row.reportRequestStatus
                 },
                 lineHide: {

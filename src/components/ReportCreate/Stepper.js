@@ -123,12 +123,27 @@ export default function Wizard() {
         }
     }
 
+    const createNameReport = (value) => {
+        if(value) {
+            if(value.NAME_REPORT) return value.NAME_REPORT
+            return value.TITLE
+        }
+        return ''
+    }
+
     const handleStart = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
         const author = {
             name,
             login
         }
+        const {l1, l2, l3} = form.reportTpl
+        const l1l2l3 = [l1,l2,l3].map((el, i) => {
+            if(i === 0) return createNameReport(el)
+            if(createNameReport(el)) return ` / ${createNameReport(el)}`
+            return ''
+        }).join('')
+
         const reportRequestDateTimeLaunch = form.configure.startCondition === 'scheduled' ? form.configure.startExecutionDateTime : +Moment()
         const newReport = {
 
@@ -136,7 +151,7 @@ export default function Wizard() {
             reportGroup: 'Группа доступа',
 
             // Шаблон отчета
-            reportTpl: form.reportTpl,
+            reportTpl: {...form.reportTpl, fullName: l1l2l3},
 
             // Дата и время создания заявки на формирование отчета
             reportRequestDateTimeFormation: +Moment(),

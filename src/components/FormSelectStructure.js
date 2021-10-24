@@ -1,9 +1,9 @@
 import React from 'react'
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import reports from '../reports.json'
-import TextField from "@material-ui/core/TextField";
-import {ChevronRight} from '@material-ui/icons';
-import {makeStyles} from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField"
+import {ChevronRight} from '@material-ui/icons'
+import {makeStyles} from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center',
         }
     }
-}));
+}))
 
 const rows = reports.root.row
     .filter(f => (f.NAME_PROC !== "no proc"))
@@ -36,10 +36,10 @@ export const resultList = rows
     }, [])
 
 export default function FormSelectStructure({isReportSelect}) {
+    const classes = useStyles()
     const [l1, setL1] = React.useState(null)
     const [l2, setL2] = React.useState(null)
     const [l3, setL3] = React.useState(null)
-    const classes = useStyles();
 
     const path = <span className={classes.root}>
         {[l1, l2, l3].map((el, i) => {
@@ -67,7 +67,10 @@ export default function FormSelectStructure({isReportSelect}) {
         const reportTpl = {
             reportTpl: {
                 path,
-                name
+                name,
+                l1,
+                l2,
+                l3
             }
         }
         if (name) isReportSelect(reportTpl)

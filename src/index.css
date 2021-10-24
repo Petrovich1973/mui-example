@@ -13,3 +13,52 @@
   font-style: italic;
   font-size: 70%;
 }
+
+
+/* demo */
+.boxSelect {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: beige;
+}
+.boxSelect select {
+  height: 32px;
+  padding: 0 10px;
+  display: block;
+  max-width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+}
+.groups {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.groups > li {
+  color: chocolate;
+  margin-bottom: 40px;
+}
+.children {
+  color: black;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.children li {
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.children li span {
+  display: flex;
+  margin-bottom: 10px;
+}
+.children li span button {
+  margin-right: 10px;
+}
+.openBtn {
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}

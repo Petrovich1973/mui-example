@@ -1,6 +1,6 @@
 import React from 'react'
 import reports from '../reports.json'
-import FormSelectStructure from "./FormSelectStructure";
+import FormSelectStructure from "./FormSelectStructure"
 import {resultList} from './FormSelectStructure'
 
 const rows = reports.root.row

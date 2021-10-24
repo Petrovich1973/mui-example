@@ -15,6 +15,7 @@ import CustomComponent from "./components/CustomComponent";
 import Home from "./pages/Home"
 import AccessGroups from "./pages/AccessGroups";
 import Work from "./pages/Work";
+import Demo from "./pages/Demo";
 
 export default function App() {
     const [state, dispatch] = React.useReducer(reducerApp, initialState);
@@ -42,6 +43,9 @@ export default function App() {
                             </Route>
                             <Route path="/home">
                                 <Home/>
+                            </Route>
+                            <Route path="/demo">
+                                <Demo/>
                             </Route>
                         </SwitchRoute>
                     </Container>

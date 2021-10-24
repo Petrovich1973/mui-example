@@ -74,12 +74,28 @@ export default function TemporaryDrawer() {
             </List>
             <Divider/>
             <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                        </ListItemIcon>
-                        <ListItemText primary={text}/>
-                    </ListItem>
+                {[
+                    {label: "Demo", link: "/demo"}
+                ].map((text, index) => (
+
+                    <NavLink
+                        className={classes.link}
+                        key={index}
+                        to={text.link}
+                        activeStyle={{
+                            fontWeight: "bold",
+                            color: "black"
+                        }}
+                    >
+                        <ListItem button>
+                            <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon/> :
+                                <MailIcon/>}
+                            </ListItemIcon>
+                            <ListItemText primary={text.label}/>
+                        </ListItem>
+                    </NavLink>
+
+
                 ))}
             </List>
         </div>

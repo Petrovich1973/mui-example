@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const empty = {TITLE: "не выбрано!!!", NAME_REPORT: "", children: []}
+const empty = {empty: true, TITLE: "Не выбрано", NAME_REPORT: "", children: []}
 
 export function FormReportSelect({report, group}) {
     const classes = useStyles()
@@ -18,12 +18,20 @@ export function FormReportSelect({report, group}) {
     const [select2, setSelect2] = React.useState(empty)
     const [select3, setSelect3] = React.useState(empty)
     const [select4, setSelect4] = React.useState(empty)
-    const [result, setResult] = React.useState(empty)
+    const [result, setResult] = React.useState({})
 
     React.useEffect(() => {
         if (report) seList(report.children)
     }, [report])
 
+    const resultReportPath = () => {
+        const r = [select1, select2, select3, select4].map((m, i) => {
+            if(i === 0) return `${m.NAME_REPORT || m.TITLE}`
+            if(!m.empty) return ` / ${m.NAME_REPORT || m.TITLE}`
+            return ''
+        })
+        return r.join('')
+    }
 
     const renderInput = (params) => (
         <TextField
@@ -196,7 +204,7 @@ export function FormReportSelect({report, group}) {
                     />
                 </div>
             ) : ''}
-            <p>Результат: {('NAME_REPORT' in result) ? result.NAME_REPORT : 'отчет не выбран'}</p>
+            <p>{('NAME_REPORT' in result) ? <span>Выбрано: <strong>{resultReportPath()}</strong></span> : 'отчет не выбран'}</p>
         </div>
     )
 }

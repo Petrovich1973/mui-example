@@ -52,7 +52,7 @@ export function ReportsList({list = [], reportsCount = 0}) {
                     <p>Всего уникальных отчетов: {reportsCount}</p>
                     <Button
                         variant="contained"
-                        color="secondary"
+                        color="primary"
                         onClick={() => setExpand(!expand)}
                     >{expand ? 'Свернуть все' : 'Развернуть все'}</Button>
                 </div>

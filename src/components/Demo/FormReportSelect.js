@@ -1,14 +1,24 @@
 import React from 'react'
-import {TextField} from "@material-ui/core";
-import {Autocomplete} from "@material-ui/lab";
+import {TextField} from "@material-ui/core"
+import {Autocomplete} from "@material-ui/lab"
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles((theme) => ({
+    input: {
+        background: "rgb(232, 241, 250)"
+    }
+}))
+
+const empty = {TITLE: "не выбрано!!!", NAME_REPORT: "", children: []}
 
 export function FormReportSelect({report, group}) {
+    const classes = useStyles()
     const [list, seList] = React.useState([])
-    const [select1, setSelect1] = React.useState({})
-    const [select2, setSelect2] = React.useState({})
-    const [select3, setSelect3] = React.useState({})
-    const [select4, setSelect4] = React.useState({})
-    const [result, setResult] = React.useState({})
+    const [select1, setSelect1] = React.useState(empty)
+    const [select2, setSelect2] = React.useState(empty)
+    const [select3, setSelect3] = React.useState(empty)
+    const [select4, setSelect4] = React.useState(empty)
+    const [result, setResult] = React.useState(empty)
 
     React.useEffect(() => {
         if (report) seList(report.children)
@@ -17,6 +27,7 @@ export function FormReportSelect({report, group}) {
 
     const renderInput = (params) => (
         <TextField
+            className={classes.input}
             autoFocus
             label=""
             {...params}
@@ -24,80 +35,80 @@ export function FormReportSelect({report, group}) {
             variant="outlined"/>
     )
 
-    const getOptionLabel = option => `${option}`
+    const getOptionLabel = option => `${option.NAME_REPORT || option.TITLE}`
     const renderOption = option => `${option.NAME_REPORT || option.TITLE}`
-    const getOptionSelected = (option, value) => option.TITLE === value.TITLE
+    const getOptionSelected = (option, value) => value.value === option.value
 
-    const handleChange1 = (e) => {
-        const name = e
-        if (name) {
-            const select = list.find(f => f.TITLE === name)
+    const handleChange1 = (value) => {
+        const {TITLE} = value
+        if (TITLE) {
+            const select = value || empty
             setSelect1(select)
-            if (!select.NAME_REPORT && select.children.length) setSelect2(select.children)
+            if (!select.NAME_REPORT && select.children.length) setSelect2({TITLE: ""})
             else {
-                setSelect2({})
-                setSelect3({})
-                setSelect4({})
+                setSelect2(empty)
+                setSelect3(empty)
+                setSelect4(empty)
                 setResult(select)
             }
         } else {
-            setSelect1({})
-            setSelect2({})
-            setSelect3({})
-            setSelect4({})
-            setResult({})
+            setSelect1(empty)
+            setSelect2(empty)
+            setSelect3(empty)
+            setSelect4(empty)
+            setResult(empty)
         }
     }
 
-    const handleChange2 = (e) => {
-        const name = e
-        if (name) {
-            const select = select1.children.find(f => f.TITLE === name)
+    const handleChange2 = (value) => {
+        const {TITLE} = value
+        if (TITLE) {
+            const select = value || empty
             setSelect2(select)
-            if (!select.NAME_REPORT && select.children.length) setSelect3(select.children)
+            if (!select.NAME_REPORT && select.children.length) setSelect3({TITLE: ""})
             else {
-                setSelect3({})
-                setSelect4({})
+                setSelect3(empty)
+                setSelect4(empty)
                 setResult(select)
             }
         } else {
-            setSelect2({})
-            setSelect3({})
-            setSelect4({})
-            setResult({})
+            setSelect2(empty)
+            setSelect3(empty)
+            setSelect4(empty)
+            setResult(empty)
         }
     }
 
-    const handleChange3 = (e) => {
-        const name = e
-        if (name) {
-            const select = select2.children.find(f => f.TITLE === name)
+    const handleChange3 = (value) => {
+        const {TITLE} = value
+        if (TITLE) {
+            const select = value || empty
             setSelect3(select)
-            if (!select.NAME_REPORT && select.children.length) setSelect4(select.children)
+            if (!select.NAME_REPORT && select.children.length) setSelect4({TITLE: ""})
             else {
-                setSelect4({})
+                setSelect4(empty)
                 setResult(select)
             }
         } else {
-            setSelect3({})
-            setSelect4({})
-            setResult({})
+            setSelect3(empty)
+            setSelect4(empty)
+            setResult(empty)
         }
     }
 
-    const handleChange4 = (e) => {
-        const name = e
-        if (name) {
-            const select = select3.children.find(f => f.TITLE === name)
+    const handleChange4 = (value) => {
+        const {TITLE} = value
+        if (TITLE) {
+            const select = select3.children.find(f => f.TITLE === TITLE) || empty
             setSelect4(select)
             if (!select.NAME_REPORT && select.children.length) alert('появился новый уровень!')
             else {
-                // setSelect4({})
+                // setSelect5({TITLE: ""})
                 setResult(select)
             }
         } else {
-            setSelect4({})
-            setResult({})
+            setSelect4(empty)
+            setResult(empty)
         }
     }
 
@@ -107,65 +118,82 @@ export function FormReportSelect({report, group}) {
             <div>
                 <Autocomplete
                     noOptionsText={'Ничего не найдено'}
-                    id="l1"
                     size={"medium"}
-                    options={[{TITLE: 'не выбрано'}, ...list]}
+                    options={[{...empty}, ...list]}
                     getOptionLabel={getOptionLabel}
                     renderOption={renderOption}
                     getOptionSelected={getOptionSelected}
                     style={{width: 450}}
-                    value={select1.TITLE || ''}
+                    defaultValue={empty}
+                    value={select1}
                     onChange={(event, newValue) => {
-                        handleChange1(newValue.TITLE)
+                        if(!newValue) handleChange1(empty)
+                        else handleChange1(newValue)
                     }}
                     renderInput={renderInput}
                 />
-                <select name="" id="" value={select1.TITLE || ''} onChange={(e) => handleChange1(e.target.value)}>
-                    <option value="">не выбрано</option>
-                    {list.map((option, i) => <option key={i} value={option.TITLE}>{option.TITLE}</option>)}
-
-                </select>
             </div>
-            {(('TITLE' in select1) && select1.children.length) ? (
+            {(select1.TITLE && select1.children.length) ? (
                 <div>
                     <Autocomplete
+                        openOnFocus
                         noOptionsText={'Ничего не найдено'}
-                        id="l1"
                         size={"medium"}
-                        options={[...select1.children, {TITLE: ''}]}
+                        options={[{...empty}, ...select1.children]}
                         getOptionLabel={getOptionLabel}
                         renderOption={renderOption}
                         getOptionSelected={getOptionSelected}
                         style={{width: 450}}
-                        value={select2.TITLE || ''}
+                        defaultValue={empty}
+                        value={select2}
                         onChange={(event, newValue) => {
-                            handleChange2(newValue.TITLE)
+                            if(!newValue) handleChange2(empty)
+                            else handleChange2(newValue)
                         }}
                         renderInput={renderInput}
                     />
-                    <select name="" id="" value={select2.TITLE || ''} onChange={(e) => handleChange2(e.target.value)}>
-                        <option value="">не выбрано</option>
-                        {select1.children.map((option, i) => <option key={i}
-                                                                     value={option.TITLE}>{option.TITLE}</option>)}
-                    </select>
                 </div>
             ) : ''}
-            {(('TITLE' in select2) && select2.children.length) ? (
+            {(select2.TITLE && select2.children.length) ? (
                 <div>
-                    <select name="" id="" value={select3.TITLE || ''} onChange={handleChange3}>
-                        <option value="">не выбрано</option>
-                        {select2.children.map((option, i) => <option key={i}
-                                                                     value={option.TITLE}>{option.TITLE}</option>)}
-                    </select>
+                    <Autocomplete
+                        openOnFocus
+                        noOptionsText={'Ничего не найдено'}
+                        size={"medium"}
+                        options={[{...empty}, ...select2.children]}
+                        getOptionLabel={getOptionLabel}
+                        renderOption={renderOption}
+                        getOptionSelected={getOptionSelected}
+                        style={{width: 450}}
+                        defaultValue={empty}
+                        value={select3}
+                        onChange={(event, newValue) => {
+                            if(!newValue) handleChange3(empty)
+                            else handleChange3(newValue)
+                        }}
+                        renderInput={renderInput}
+                    />
                 </div>
             ) : ''}
-            {(('TITLE' in select3) && select3.children.length) ? (
+            {(select3.TITLE && select3.children.length) ? (
                 <div>
-                    <select name="" id="" value={select4.TITLE || ''} onChange={handleChange4}>
-                        <option value="">не выбрано</option>
-                        {select3.children.map((option, i) => <option key={i}
-                                                                     value={option.TITLE}>{option.TITLE}</option>)}
-                    </select>
+                    <Autocomplete
+                        openOnFocus
+                        noOptionsText={'Ничего не найдено'}
+                        size={"medium"}
+                        options={[{...empty}, ...select3.children]}
+                        getOptionLabel={getOptionLabel}
+                        renderOption={renderOption}
+                        getOptionSelected={getOptionSelected}
+                        style={{width: 450}}
+                        defaultValue={empty}
+                        value={select4}
+                        onChange={(event, newValue) => {
+                            if(!newValue) handleChange4(empty)
+                            else handleChange4(newValue)
+                        }}
+                        renderInput={renderInput}
+                    />
                 </div>
             ) : ''}
             <p>Результат: {('NAME_REPORT' in result) ? result.NAME_REPORT : 'отчет не выбран'}</p>

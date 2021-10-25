@@ -1,4 +1,6 @@
 import React from 'react'
+import {TextField} from "@material-ui/core";
+import {Autocomplete} from "@material-ui/lab";
 
 export function FormReportSelect({report, group}) {
     const [list, seList] = React.useState([])
@@ -12,8 +14,22 @@ export function FormReportSelect({report, group}) {
         if (report) seList(report.children)
     }, [report])
 
+
+    const renderInput = (params) => (
+        <TextField
+            autoFocus
+            label=""
+            {...params}
+            placeholder="Не выбрано"
+            variant="outlined"/>
+    )
+
+    const getOptionLabel = option => `${option}`
+    const renderOption = option => `${option.NAME_REPORT || option.TITLE}`
+    const getOptionSelected = (option, value) => option.TITLE === value.TITLE
+
     const handleChange1 = (e) => {
-        const name = e.target.value
+        const name = e
         if (name) {
             const select = list.find(f => f.TITLE === name)
             setSelect1(select)
@@ -34,7 +50,7 @@ export function FormReportSelect({report, group}) {
     }
 
     const handleChange2 = (e) => {
-        const name = e.target.value
+        const name = e
         if (name) {
             const select = select1.children.find(f => f.TITLE === name)
             setSelect2(select)
@@ -53,7 +69,7 @@ export function FormReportSelect({report, group}) {
     }
 
     const handleChange3 = (e) => {
-        const name = e.target.value
+        const name = e
         if (name) {
             const select = select2.children.find(f => f.TITLE === name)
             setSelect3(select)
@@ -70,7 +86,7 @@ export function FormReportSelect({report, group}) {
     }
 
     const handleChange4 = (e) => {
-        const name = e.target.value
+        const name = e
         if (name) {
             const select = select3.children.find(f => f.TITLE === name)
             setSelect4(select)
@@ -89,7 +105,22 @@ export function FormReportSelect({report, group}) {
         <div className="boxSelect">
             <h4>{group}</h4>
             <div>
-                <select name="" id="" value={select1.TITLE || ''} onChange={handleChange1}>
+                <Autocomplete
+                    noOptionsText={'Ничего не найдено'}
+                    id="l1"
+                    size={"medium"}
+                    options={[{TITLE: 'не выбрано'}, ...list]}
+                    getOptionLabel={getOptionLabel}
+                    renderOption={renderOption}
+                    getOptionSelected={getOptionSelected}
+                    style={{width: 450}}
+                    value={select1.TITLE || ''}
+                    onChange={(event, newValue) => {
+                        handleChange1(newValue.TITLE)
+                    }}
+                    renderInput={renderInput}
+                />
+                <select name="" id="" value={select1.TITLE || ''} onChange={(e) => handleChange1(e.target.value)}>
                     <option value="">не выбрано</option>
                     {list.map((option, i) => <option key={i} value={option.TITLE}>{option.TITLE}</option>)}
 
@@ -97,7 +128,22 @@ export function FormReportSelect({report, group}) {
             </div>
             {(('TITLE' in select1) && select1.children.length) ? (
                 <div>
-                    <select name="" id="" value={select2.TITLE || ''} onChange={handleChange2}>
+                    <Autocomplete
+                        noOptionsText={'Ничего не найдено'}
+                        id="l1"
+                        size={"medium"}
+                        options={[...select1.children, {TITLE: ''}]}
+                        getOptionLabel={getOptionLabel}
+                        renderOption={renderOption}
+                        getOptionSelected={getOptionSelected}
+                        style={{width: 450}}
+                        value={select2.TITLE || ''}
+                        onChange={(event, newValue) => {
+                            handleChange2(newValue.TITLE)
+                        }}
+                        renderInput={renderInput}
+                    />
+                    <select name="" id="" value={select2.TITLE || ''} onChange={(e) => handleChange2(e.target.value)}>
                         <option value="">не выбрано</option>
                         {select1.children.map((option, i) => <option key={i}
                                                                      value={option.TITLE}>{option.TITLE}</option>)}

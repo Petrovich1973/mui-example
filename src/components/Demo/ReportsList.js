@@ -1,5 +1,6 @@
 import React from 'react'
 import {FormReportSelect} from "./FormReportSelect";
+import {Button} from "@material-ui/core";
 
 const Row = ({row = {}, expand = false}) => {
     const [open, setOpen] = React.useState(false)
@@ -49,7 +50,11 @@ export function ReportsList({list = [], reportsCount = 0}) {
             <div>
                 <div>
                     <p>Всего уникальных отчетов: {reportsCount}</p>
-                    <button onClick={() => setExpand(!expand)}>{expand ? 'Свернуть все' : 'Развернуть все'}</button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setExpand(!expand)}
+                    >{expand ? 'Свернуть все' : 'Развернуть все'}</Button>
                 </div>
                 <FormReportSelect report={rows.find(f => (f.group === 'dep_web_reports'))} group={'dep_web_reports'}/>
             </div>

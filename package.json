@@ -18,7 +18,6 @@
     "babel-polyfill": "^7.0.0-beta.3",
     "clsx": "^1.1.1",
     "core-js": "^3.19.0",
-    "fast-text-encoding": "^1.0.3",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",

@@ -2,18 +2,21 @@ import React from 'react'
 import {TextField} from "@material-ui/core"
 import {Autocomplete} from "@material-ui/lab"
 import { makeStyles } from "@material-ui/core/styles"
+import {useNormalizeReportList} from "../../utils/normalizeReportList";
 
 const useStyles = makeStyles((theme) => ({
     input: {
-        background: "rgb(232, 241, 250)"
+        // background: "rgb(232, 241, 250)"
+        background: "transparent"
     }
 }))
 
 const empty = {empty: true, TITLE: "Не выбрано", NAME_REPORT: "", children: []}
 
-export function FormReportSelect({report, group}) {
+export function FormReportSelect({group = '', isReportSelect = () => {}}) {
+    const {reportsTpl} = useNormalizeReportList()
     const classes = useStyles()
-    const [list, seList] = React.useState([])
+    const [list, setList] = React.useState([])
     const [select1, setSelect1] = React.useState(empty)
     const [select2, setSelect2] = React.useState(empty)
     const [select3, setSelect3] = React.useState(empty)
@@ -21,11 +24,34 @@ export function FormReportSelect({report, group}) {
     const [result, setResult] = React.useState({})
 
     React.useEffect(() => {
-        if (report) seList(report.children)
-    }, [report])
+        const l = [...reportsTpl].find(f => (f.group === group))
+        if(l) setList(l.children || [])
+    }, [reportsTpl])
+
+    React.useEffect(() => {
+        const name = (result.NAME_REPORT)
+        const reportTpl = {
+            reportTpl: {
+                path: resultReportPath(),
+                name,
+                l1: select2,
+                l2: select3,
+                l3: select4
+            }
+        }
+        if (name) isReportSelect(reportTpl)
+        else isReportSelect({
+            reportTpl: {
+                path: '',
+                name: ''
+            }
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [result])
 
     const resultReportPath = () => {
         const r = [select1, select2, select3, select4].map((m, i) => {
+            if(m.TITLE === "Не выбрано") return ''
             if(i === 0) return `${m.NAME_REPORT || m.TITLE}`
             if(!m.empty) return ` / ${m.NAME_REPORT || m.TITLE}`
             return ''
@@ -120,9 +146,10 @@ export function FormReportSelect({report, group}) {
         }
     }
 
+    if(!list.length) return <div/>
+
     return (
-        <div className="boxSelect">
-            <h4>{group}</h4>
+        <div>
             <div>
                 <Autocomplete
                     noOptionsText={'Ничего не найдено'}
@@ -204,7 +231,6 @@ export function FormReportSelect({report, group}) {
                     />
                 </div>
             ) : ''}
-            <p>{('NAME_REPORT' in result) ? <span>Выбрано: <strong>{resultReportPath()}</strong></span> : 'отчет не выбран'}</p>
         </div>
     )
 }

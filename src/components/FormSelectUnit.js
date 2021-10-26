@@ -95,7 +95,7 @@ export default function FormSelectUnit({isUnitSelect}) {
             </>}
             <div>
                 <Autocomplete
-                    openOnFocus={false}
+                    openOnFocus
                     noOptionsText={'Ничего не найдено'}
                     id="l1"
                     size={"medium"}

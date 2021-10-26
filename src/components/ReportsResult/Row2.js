@@ -87,10 +87,11 @@ export default function Row2({row}) {
             </TableRow>
             <TableRow
                 style={{background: lineVisible.status === 'waiting' ? 'rgba(0,0,0,.1)' : 'transparent'}}>
-                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                <TableCell/>
+                <TableCell style={{padding: 0}} colSpan={5}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small" aria-label="purchases" style={{marginLeft: '-12px'}}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Дата создания</TableCell>

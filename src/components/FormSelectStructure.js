@@ -73,6 +73,7 @@ export default function FormSelectStructure({isReportSelect}) {
                 l3
             }
         }
+        // console.log(reportTpl)
         if (name) isReportSelect(reportTpl)
         else isReportSelect({
             reportTpl: {

@@ -114,7 +114,7 @@ export default function ReportsList() {
                 login: 'SSBiletskaya'
             }
         }
-    ]), [reportRequest])
+    ]), [reportRequest, reportsDoneList])
 
     const filter2 = ({login}) => {
         if (!user.settings.viewAll) return user.login === login

@@ -56,7 +56,7 @@ export function ReportsList({list = [], reportsCount = 0}) {
                         onClick={() => setExpand(!expand)}
                     >{expand ? 'Свернуть все' : 'Развернуть все'}</Button>
                 </div>
-                <FormReportSelect report={rows.find(f => (f.group === 'dep_web_reports'))} group={'dep_web_reports'}/>
+                <FormReportSelect group={'dep_web_reports'} />
             </div>
             <ul className="groups">
                 {rows.map((row, i) => (

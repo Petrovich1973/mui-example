@@ -108,7 +108,7 @@ export default function Wizard() {
         switch (step) {
             case 0:
                 return (
-                    <Step01 {...{onChangeForm}}/>
+                    <Step01 {...{onChangeForm, group}}/>
                 )
             case 1:
                 return (
@@ -137,12 +137,6 @@ export default function Wizard() {
             name,
             login
         }
-        const {l1, l2, l3} = form.reportTpl
-        const l1l2l3 = [l1,l2,l3].map((el, i) => {
-            if(i === 0) return createNameReport(el)
-            if(createNameReport(el)) return ` / ${createNameReport(el)}`
-            return ''
-        }).join('')
 
         const reportRequestDateTimeLaunch = form.configure.startCondition === 'scheduled' ? form.configure.startExecutionDateTime : +Moment()
         const newReport = {
@@ -151,7 +145,7 @@ export default function Wizard() {
             reportGroup: 'Группа доступа',
 
             // Шаблон отчета
-            reportTpl: {...form.reportTpl, fullName: l1l2l3},
+            reportTpl: {...form.reportTpl, fullName: form.reportTpl.path},
 
             // Дата и время создания заявки на формирование отчета
             reportRequestDateTimeFormation: +Moment(),
@@ -211,7 +205,7 @@ export default function Wizard() {
     }
 
     const isDisabledNext = !Boolean(form.reportTpl.name) || (activeStep === 1 && !Boolean(form.unit.tb))
-    console.log(form)
+    // console.log(form)
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepper}>

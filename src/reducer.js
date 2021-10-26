@@ -1,7 +1,7 @@
-import React from "react";
-import Moment from "moment";
-Moment.locale('ru');
-export const ContextApp = React.createContext();
+import React from "react"
+import Moment from "moment"
+Moment.locale('ru')
+export const ContextApp = React.createContext()
 
 export const initialState = {
     theme: true,
@@ -62,7 +62,7 @@ export const initialState = {
         // Статус формирования отчета witting | processing | complete | error
         reportRequestStatus: 'waiting'
     }
-};
+}
 
 export const reducerApp = (state, action) => {
     switch(action.type) {
@@ -87,4 +87,4 @@ export const reducerApp = (state, action) => {
         default:
             return state
     }
-};
+}

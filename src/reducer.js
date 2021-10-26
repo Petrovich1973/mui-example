@@ -4,6 +4,7 @@ Moment.locale('ru');
 export const ContextApp = React.createContext();
 
 export const initialState = {
+    theme: true,
     reportsDoneList: [],
     auth: true,
     user: {

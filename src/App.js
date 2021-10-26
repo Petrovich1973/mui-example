@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import {ContextApp, initialState, reducerApp} from "./reducer.js";
 import themeDefault from './themes/theme'
+import themeDark from './themes/themeDark'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import AppBar from './components/AppBar'
@@ -22,7 +23,7 @@ export default function App() {
 
     return (
         <ContextApp.Provider value={{state, dispatch}}>
-            <ThemeProvider theme={themeDefault}>
+            <ThemeProvider theme={state.theme ? themeDefault : themeDark}>
                 <CssBaseline/>
                 <Router>
                     <Container maxWidth="lg">

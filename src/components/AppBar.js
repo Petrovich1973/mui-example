@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
+import BrightnessMedium from '@material-ui/icons/BrightnessMedium'
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
@@ -28,10 +29,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MenuAppBar() {
     const classes = useStyles()
-    const {state} = React.useContext(ContextApp);
+    const {state, dispatch} = React.useContext(ContextApp);
     const {auth, user} = state
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
+
+    const handleSwitchTheme = () => {
+        dispatch({
+            type: 'updateState',
+            payload: {
+                theme: !state.theme
+            }
+        })
+    }
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
@@ -82,7 +92,7 @@ export default function MenuAppBar() {
                                 onClose={handleClose}
                             >
                                 <MenuItem onClick={handleClose}>Выйти</MenuItem>
-                                <MenuItem onClick={handleClose}>Профиль</MenuItem>
+                                <MenuItem onClick={handleClose}><BrightnessMedium onClick={handleSwitchTheme}/></MenuItem>
                             </Menu>
                         </div>
                     )}

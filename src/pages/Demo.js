@@ -1,13 +1,39 @@
 import React from 'react'
 import {ReportsList} from "../components/Demo/ReportsList"
 import {useNormalizeReportList} from '../utils/normalizeReportList'
+import markova from '../reportMarkova.json'
+import Test from "./Test";
 
 export default function Demo() {
     const {reportsTpl, reportsCount} = useNormalizeReportList()
 
     return (
         <div className="container">
-            <ReportsList list={reportsTpl} reportsCount={reportsCount}/>
+            <Test/>
+            {/*<table cellPadding={10}>
+                <thead>
+                <tr>
+                {Object.keys(markova.report[0]).map((key, i) => (
+                    <th align="left" key={i}>{key}</th>
+                ))}
+                </tr>
+                </thead>
+                <tbody>
+                {markova.report.map((el, i) => {
+                    const keys = Object.keys(el)
+                    return (
+                        <tr key={i}>
+                            {keys.map((key, idTd) => (
+                                <td key={idTd}>
+                                    {el[key] !== "NULL" ? el[key] : "---"}
+                                </td>
+                            ))}
+                        </tr>
+                    )
+                })}
+                </tbody>
+            </table>*/}
+            {/*<ReportsList list={reportsTpl} reportsCount={reportsCount}/>*/}
         </div>
     )
 }

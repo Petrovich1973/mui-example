@@ -1,5 +1,5 @@
 import React from 'react';
-import {DataGrid} from '@mui/x-data-grid';
+import {DataGrid, GridFilterPanel} from '@mui/x-data-grid';
 // import axios from "axios";
 import {report} from "../../data"
 
@@ -71,6 +71,9 @@ export default function ReportDetail() {
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
+                    components={{
+                        FilterPanel: GridFilterPanel
+                    }}
                 />
             </div>}
         </>

@@ -46,12 +46,17 @@ export default function Test() {
     }
 
     const onSend = async () => {
+        try {
+            const isValid = JSON.parse(data)
+        } catch (err) {
+            alert(JSON.stringify(err))
+        }
         setResult('---')
         setLoad(true)
         await axios({
             method,
             url,
-            data
+            data: JSON.parse(data)
         })
         .then(res => setResult(JSON.stringify(res.data)))
         .catch(err => {

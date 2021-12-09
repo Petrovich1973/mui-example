@@ -1,4 +1,20 @@
 {
+  "task": [
+    {
+      "reportName": "Вкл-14",
+      "reportId": "vkl-14_001",
+      "reportStatus": "done",
+      "reportCreateDate": "2021-12-08T13:24:00",
+      "reportGenerationDateTime": "2021-12-08T13:24:00"
+    },
+    {
+      "reportName": "Вкл-14",
+      "reportId": "vkl-14_002",
+      "reportStatus": "waiting",
+      "reportCreateDate": "2021-12-09T16:03:00",
+      "reportGenerationDateTime": "2021-12-15T08:00:00"
+    }
+  ],
   "report": [
     {
       "expirationday": "Nov 27, 2022 12:00:00 AM",

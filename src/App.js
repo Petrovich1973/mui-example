@@ -17,6 +17,7 @@ import Home from "./pages/Home"
 import AccessGroups from "./pages/AccessGroups";
 import Work from "./pages/Work";
 import Demo from "./pages/Demo";
+import RmOc from "./pages/RmOc";
 
 export default function App() {
     const [state, dispatch] = React.useReducer(reducerApp, initialState);
@@ -32,7 +33,10 @@ export default function App() {
                         <SwitchRoute>
                             <Route exact path="/">
                                 {/* eslint-disable-next-line react/jsx-no-undef */}
-                                <Redirect to="/groups"/>
+                                <Redirect to="/rmoc"/>
+                            </Route>
+                            <Route path="/rmoc">
+                                <RmOc/>
                             </Route>
                             <Route exact path="/groups">
                                 <AccessGroups/>

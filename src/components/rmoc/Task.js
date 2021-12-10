@@ -1,4 +1,5 @@
 import React from 'react'
+import {useHistory, useRouteMatch} from "react-router-dom";
 
 const styleLi = {
     display: 'flex',
@@ -28,7 +29,8 @@ const styleTaskStatus = {
     display: 'block'
 }
 
-export default function Task ({task}) {
+export default function Task({task}) {
+
     const {
         reportName = "Вкл-14",
         reportId = "vkl-14_001",
@@ -36,8 +38,14 @@ export default function Task ({task}) {
         reportCreateDate = "2021-12-08T13:24:00",
         reportGenerationDateTime = "2021-12-08T13:24:00"
     } = task
-    return(
-        <li style={styleLi}>
+
+    let history = useHistory();
+    let {url} = useRouteMatch();
+
+    const handleDownloadButton = r => history.push(`${url}/${r}`);
+
+    return (
+        <li style={styleLi} onClick={() => handleDownloadButton(reportId)}>
             <span style={styleTaskName}>{reportName}</span>
             <span style={styleRow}>
                 <span style={styleTaskDateCreate}>{reportCreateDate}</span>

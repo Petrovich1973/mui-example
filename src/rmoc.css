@@ -1,0 +1,30 @@
+#root {
+    height: 100vh;
+}
+.rmoc {
+    height: 100vh;
+    display: flex !important;
+    flex-direction: column;
+    align-content: stretch;
+}
+.rmoc > * {
+    flex-grow: 0 !important;
+    flex-shrink: 0;
+}
+.pageRMOC {
+    flex-grow: 1 !important;
+    display: flex;
+    flex-shrink: 1;
+    max-height: 100%;
+    overflow: hidden;
+}
+.pageTasks {
+    display: flex !important;
+    flex-direction: column;
+    align-content: stretch;
+}
+.listTasks {
+    flex-grow: 1;
+    max-height: 100%;
+    overflow: auto;
+}

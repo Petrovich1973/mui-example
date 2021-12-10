@@ -47,10 +47,10 @@ export function getStatusRow(status, classes) {
 
 export default function Row2({row}) {
     const {lineVisible, lineHide} = row
-    let history = useHistory();
     const [open, setOpen] = React.useState(false);
-    let {url} = useRouteMatch();
     const classes = useRowStyles();
+    let history = useHistory();
+    let {url} = useRouteMatch();
 
     const handleDownloadButton = r => history.push(`${url}/${r.report}`);
 

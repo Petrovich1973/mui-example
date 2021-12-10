@@ -7,10 +7,14 @@ import Test from "./Test";
 export default function Demo() {
     const {reportsTpl, reportsCount} = useNormalizeReportList()
 
+    const filter = row => {
+        return row['cod16_depohist.id_mega'].includes('33')
+    }
+
     return (
         <div className="container">
             <Test/>
-            {/*<table cellPadding={10}>
+            <table cellPadding={10}>
                 <thead>
                 <tr>
                 {Object.keys(markova.report[0]).map((key, i) => (
@@ -19,7 +23,7 @@ export default function Demo() {
                 </tr>
                 </thead>
                 <tbody>
-                {markova.report.map((el, i) => {
+                {markova.report.filter(filter).map((el, i) => {
                     const keys = Object.keys(el)
                     return (
                         <tr key={i}>
@@ -32,7 +36,7 @@ export default function Demo() {
                     )
                 })}
                 </tbody>
-            </table>*/}
+            </table>
             {/*<ReportsList list={reportsTpl} reportsCount={reportsCount}/>*/}
         </div>
     )

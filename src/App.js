@@ -27,7 +27,7 @@ export default function App() {
             <ThemeProvider theme={state.theme ? themeDefault : themeDark}>
                 <CssBaseline/>
                 <Router>
-                    <Container maxWidth="lg">
+                    <Container maxWidth="lg" className="rmoc">
                         <AppBar/>
                         <CustomComponent/>
                         <SwitchRoute>

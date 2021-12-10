@@ -11,8 +11,9 @@ const styleUl = {
 
 export default function ListTask ({list = []}) {
     return(
-        <ul style={styleUl}>
+        <ul style={styleUl} className="listTasks">
             {list.map((task, i) => <Task key={i} task={task}/>)}
+            <li>end list</li>
         </ul>
     )
 }

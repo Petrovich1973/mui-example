@@ -6,6 +6,7 @@
 }
 .table th, .table td {
   padding: .4rem 1rem;
+  text-align: left;
 }
 .table td small {
   display: block;

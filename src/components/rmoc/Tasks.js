@@ -25,15 +25,15 @@ export default function Tasks() {
             .finally(() => setLoading(false))
     }, [])
 
-    if(loading)
+    if (loading)
         return (
             <div>Waiting...</div>
         )
 
     return (
-        <div style={styleBlock}>
+        <div style={styleBlock} className="pageTasks">
             <Search/>
-            <ListTask list={list}/>
+            <ListTask list={[...list, ...list, ...list, ...list, ...list, ...list, ...list]}/>
         </div>
     )
 }
